@@ -1,0 +1,2638 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Matching History - Admin Panel</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 15px;
+
+            overflow-y: auto;
+        }
+
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .admin-label {
+            font-size: 11px;
+            color: #9ca3af;
+
+            text-transform: uppercase;
+
+            margin: 20px 10px 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            color: #d1d5db;
+
+            text-decoration: none;
+
+            padding: 13px 15px;
+
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+
+        .nav-link.active i {
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+
+            min-height: 100vh;
+
+            padding: 35px 40px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 28px;
+
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: #ecfeff;
+
+            color: #0891b2;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        /* =========================
+           LAST UPDATED
+        ========================= */
+
+        .last-updated {
+            margin: -12px 0 25px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .summary-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 20px;
+
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .summary-card::before {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 4px;
+            height: 100%;
+
+            background: #2563eb;
+        }
+
+
+        .summary-card.plagiarism::before {
+            background: #f59e0b;
+        }
+
+
+        .summary-card.classification::before {
+            background: #10b981;
+        }
+
+
+        .summary-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            margin-bottom: 15px;
+        }
+
+
+        .summary-card h3 {
+            margin: 0;
+
+            font-size: 13px;
+
+            color: #6b7280;
+
+            font-weight: 600;
+        }
+
+
+        .summary-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 8px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            font-size: 14px;
+        }
+
+
+        .plagiarism .summary-icon {
+            background: #fffbeb;
+
+            color: #d97706;
+        }
+
+
+        .classification .summary-icon {
+            background: #ecfdf5;
+
+            color: #059669;
+        }
+
+
+        .summary-value {
+            margin: 0;
+
+            font-size: 26px;
+
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+
+        .summary-card small {
+            display: block;
+
+            margin-top: 6px;
+
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           CLASSIFICATION CARDS
+        ========================= */
+
+        .classification-grid .summary-card:nth-child(1)::before {
+            background: #10b981;
+        }
+
+
+        .classification-grid .summary-card:nth-child(2)::before {
+            background: #3b82f6;
+        }
+
+
+        .classification-grid .summary-card:nth-child(3)::before {
+            background: #f59e0b;
+        }
+
+
+        .classification-grid .summary-card:nth-child(4)::before {
+            background: #ef4444;
+        }
+
+
+        .classification-grid .summary-card:nth-child(1) .summary-icon {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+
+        .classification-grid .summary-card:nth-child(2) .summary-icon {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+
+        .classification-grid .summary-card:nth-child(3) .summary-icon {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+
+        .classification-grid .summary-card:nth-child(4) .summary-icon {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+
+        /* =========================
+           CHART SECTION
+        ========================= */
+
+        .chart-section {
+            margin-bottom: 25px;
+        }
+
+
+        .chart-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .chart-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .chart-header i {
+            color: #2563eb;
+
+            font-size: 18px;
+        }
+
+
+        .chart-header h2 {
+            margin: 0;
+
+            font-size: 18px;
+
+            color: #111827;
+        }
+
+
+        .chart-container {
+            width: 100%;
+
+            height: 320px;
+
+            position: relative;
+        }
+
+
+        /* =========================
+           FILTER CARD
+        ========================= */
+
+        .filter-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .filter-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .filter-title i {
+            color: #8b5cf6;
+
+            font-size: 18px;
+        }
+
+
+        .filter-title h2 {
+            margin: 0;
+
+            font-size: 18px;
+        }
+
+
+        .filter-container form {
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .filter-group {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+
+        .filter-group label {
+            font-size: 12px;
+
+            font-weight: 600;
+
+            color: #6b7280;
+        }
+
+
+        .filter-container select {
+            min-width: 170px;
+
+            padding: 10px 12px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            background: white;
+
+            font-size: 13px;
+
+            color: #374151;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        .filter-container select:focus {
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+
+        .filter-button {
+            padding: 10px 17px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+
+            font-weight: 500;
+        }
+
+
+        .filter-button:hover {
+            background: #1d4ed8;
+        }
+
+
+        .clear-filters-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            background: #f3f4f6;
+
+            color: #4b5563;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 500;
+        }
+
+
+        .clear-filters-button:hover {
+            background: #e5e7eb;
+        }
+
+
+        /* =========================
+           EXPORT
+        ========================= */
+
+        .action-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .result-count {
+            margin: 0;
+
+            font-size: 14px;
+
+            color: #6b7280;
+        }
+
+
+        .result-count strong {
+            color: #111827;
+        }
+
+
+        .export-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 16px;
+
+            background: #ecfdf5;
+
+            color: #047857;
+
+            border: 1px solid #a7f3d0;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .export-button:hover {
+            background: #d1fae5;
+        }
+
+
+        /* =========================
+           RESULTS TABLE
+        ========================= */
+
+        .results-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+
+            overflow: hidden;
+        }
+
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 950px;
+        }
+
+
+        thead {
+            background: #f9fafb;
+        }
+
+
+        th {
+            padding: 13px 14px;
+
+            text-align: left;
+
+            font-size: 11px;
+
+            color: #6b7280;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            white-space: nowrap;
+        }
+
+
+        td {
+            padding: 14px;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            font-size: 13px;
+
+            color: #374151;
+
+            vertical-align: middle;
+        }
+
+
+        tbody tr {
+            transition: 0.15s;
+        }
+
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        .id-cell {
+            color: #9ca3af;
+
+            font-weight: 600;
+        }
+
+
+        .resume-cell,
+        .job-cell {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            max-width: 210px;
+        }
+
+
+        .cell-icon {
+            width: 31px;
+            height: 31px;
+
+            flex-shrink: 0;
+
+            border-radius: 7px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            font-size: 13px;
+        }
+
+
+        .job-cell .cell-icon {
+            background: #ecfdf5;
+
+            color: #059669;
+        }
+
+
+        .cell-text {
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+            white-space: nowrap;
+
+            font-weight: 500;
+
+            color: #374151;
+        }
+
+
+        /* =========================
+           SCORE
+        ========================= */
+
+        .score {
+            font-weight: bold;
+
+            color: #111827;
+
+            white-space: nowrap;
+        }
+
+
+        .score-value {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           CLASSIFICATION BADGES
+        ========================= */
+
+        .classification-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+
+        .classification-badge.strong {
+            background: #dcfce7;
+
+            color: #166534;
+        }
+
+
+        .classification-badge.good {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .classification-badge.moderate {
+            background: #fef3c7;
+
+            color: #92400e;
+        }
+
+
+        .classification-badge.weak {
+            background: #fee2e2;
+
+            color: #991b1b;
+        }
+
+
+        /* =========================
+           PLAGIARISM
+        ========================= */
+
+        .plagiarism-value {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background: #fffbeb;
+
+            color: #b45309;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           DATE
+        ========================= */
+
+        .date-cell {
+            color: #6b7280;
+
+            font-size: 12px;
+
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
+
+        .view-link {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 7px 12px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+
+            transition: 0.2s;
+        }
+
+
+        .view-link:hover {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        /* =========================
+           NO RESULTS
+        ========================= */
+
+        .no-results {
+            text-align: center;
+
+            padding: 45px 20px;
+
+            color: #9ca3af;
+
+            font-style: italic;
+        }
+
+
+        .no-results i {
+            display: block;
+
+            margin-bottom: 10px;
+
+            font-size: 30px;
+
+            color: #d1d5db;
+
+            font-style: normal;
+        }
+
+
+        /* =========================
+           PAGINATION
+        ========================= */
+
+        .pagination {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 25px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .pagination a,
+        .current-page {
+            min-width: 36px;
+
+            height: 36px;
+
+            padding: 8px 11px;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 13px;
+        }
+
+
+        .pagination a {
+            color: #4b5563;
+
+            background: white;
+        }
+
+
+        .pagination a:hover {
+            background: #f3f4f6;
+
+            border-color: #d1d5db;
+        }
+
+
+        .current-page {
+            background: #2563eb;
+
+            border-color: #2563eb;
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+
+        .pagination-dots {
+            padding: 8px 4px;
+
+            color: #9ca3af;
+        }
+
+
+        /* =========================
+           PAGE ACTIONS
+        ========================= */
+
+        .page-actions {
+            margin-top: 25px;
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .back-button,
+        .refresh-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 9px 13px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.2s;
+        }
+
+
+        .back-button {
+            color: #6b7280;
+
+            background: #f3f4f6;
+        }
+
+
+        .back-button:hover {
+            background: #e5e7eb;
+
+            color: #111827;
+        }
+
+
+        .refresh-button {
+            color: #2563eb;
+
+            background: #eff6ff;
+        }
+
+
+        .refresh-button:hover {
+            background: #dbeafe;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+
+                padding: 25px;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: auto;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .page-header {
+                align-items: flex-start;
+            }
+
+
+            .filter-container form {
+                align-items: stretch;
+            }
+
+
+            .filter-group {
+                width: 100%;
+            }
+
+
+            .filter-container select {
+                width: 100%;
+            }
+
+
+            .filter-button,
+            .clear-filters-button {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+
+        <div class="admin-label">
+            Administrator Panel
+        </div>
+
+
+        <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="nav-link dashboard"
+        >
+            <i class="fas fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.users') }}"
+            class="nav-link users"
+        >
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.resumes') }}"
+            class="nav-link resumes"
+        >
+            <i class="fas fa-file-lines"></i>
+            <span>Resumes</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.job_descriptions') }}"
+            class="nav-link jobs"
+        >
+            <i class="fas fa-briefcase"></i>
+            <span>Job Descriptions</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.matching_results') }}"
+            class="nav-link matching active"
+        >
+            <i class="fas fa-chart-column"></i>
+            <span>Matching History</span>
+        </a>
+
+
+        <div class="admin-label">
+            Account
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="nav-link logout"
+        >
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Matching History
+                </h1>
+
+                <p>
+                    Review, analyze and manage candidate matching results
+                </p>
+
+            </div>
+
+
+            <div class="header-icon">
+
+                <i class="fas fa-chart-column"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- LAST UPDATED -->
+
+        <p class="last-updated">
+
+            <i class="fas fa-clock"></i>
+
+            Last updated:
+            {{ last_updated.strftime("%Y-%m-%d %H:%M:%S") }}
+
+        </p>
+
+
+        <!-- =========================
+             MATCHING SUMMARY
+        ========================= -->
+
+        <div class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Total Results
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-chart-column"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ total_results }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Average Score
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(average_score) }}%
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Highest Score
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(highest_score) }}%
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Lowest Score
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(lowest_score) }}%
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PLAGIARISM SUMMARY
+        ========================= -->
+
+        <div class="summary-grid">
+
+
+            <div class="summary-card plagiarism">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Total Plagiarism Checks
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ total_plagiarism_checks }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-card plagiarism">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Average Plagiarism
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-percent"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(average_plagiarism_score) }}%
+                </p>
+
+            </div>
+
+
+            <div class="summary-card plagiarism">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Highest Plagiarism
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(highest_plagiarism_score) }}%
+                </p>
+
+            </div>
+
+
+            <div class="summary-card plagiarism">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Lowest Plagiarism
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ "%.2f"|format(lowest_plagiarism_score) }}%
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CANDIDATE CLASSIFICATION
+        ========================= -->
+
+        <div class="summary-grid classification-grid">
+
+
+            <div class="summary-card classification">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Strong Candidates
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-circle-check"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ strong_candidates }}
+                </p>
+
+                <small>
+                    {{ "%.2f"|format(strong_percentage) }}%
+                </small>
+
+            </div>
+
+
+            <div class="summary-card classification">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Good Candidates
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-thumbs-up"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ good_candidates }}
+                </p>
+
+                <small>
+                    {{ "%.2f"|format(good_percentage) }}%
+                </small>
+
+            </div>
+
+
+            <div class="summary-card classification">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Moderate Candidates
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-circle-exclamation"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ moderate_candidates }}
+                </p>
+
+                <small>
+                    {{ "%.2f"|format(moderate_percentage) }}%
+                </small>
+
+            </div>
+
+
+            <div class="summary-card classification">
+
+                <div class="summary-top">
+
+                    <h3>
+                        Weak Candidates
+                    </h3>
+
+                    <div class="summary-icon">
+                        <i class="fas fa-circle-xmark"></i>
+                    </div>
+
+                </div>
+
+                <p class="summary-value">
+                    {{ weak_candidates }}
+                </p>
+
+                <small>
+                    {{ "%.2f"|format(weak_percentage) }}%
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CLASSIFICATION CHART
+        ========================= -->
+
+        <section class="chart-section">
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <i class="fas fa-chart-bar"></i>
+
+                    <h2>
+                        Candidate Classification Distribution
+                    </h2>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="classificationChart"
+
+                        data-strong="{{ strong_candidates }}"
+
+                        data-good="{{ good_candidates }}"
+
+                        data-moderate="{{ moderate_candidates }}"
+
+                        data-weak="{{ weak_candidates }}"
+                    >
+                    </canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PLAGIARISM CHART
+        ========================= -->
+
+        <section class="chart-section">
+
+            <div class="chart-card">
+
+                <div class="chart-header">
+
+                    <i class="fas fa-shield-halved"></i>
+
+                    <h2>
+                        Plagiarism Similarity Distribution
+                    </h2>
+
+                </div>
+
+
+                <div class="chart-container">
+
+                    <canvas
+                        id="plagiarismChart"
+
+                        data-low="{{ low_similarity }}"
+
+                        data-moderate="{{ moderate_similarity }}"
+
+                        data-high="{{ high_similarity }}"
+
+                        data-very-high="{{ very_high_similarity }}"
+                    >
+                    </canvas>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             FILTERS
+        ========================= -->
+
+        <div class="filter-card">
+
+            <div class="filter-title">
+
+                <i class="fas fa-filter"></i>
+
+                <h2>
+                    Filter Matching Results
+                </h2>
+
+            </div>
+
+
+            <div class="filter-container">
+
+                <form
+                    method="GET"
+                    action="{{ url_for('admin.matching_results') }}"
+                >
+
+
+                    <!-- CLASSIFICATION -->
+
+                    <div class="filter-group">
+
+                        <label for="classification">
+                            Candidate Classification
+                        </label>
+
+                        <select
+                            name="classification"
+                            id="classification"
+                        >
+
+                            <option value="">
+                                All Candidates
+                            </option>
+
+
+                            <option
+                                value="Strong Candidate"
+                                {% if classification == "Strong Candidate" %}selected{% endif %}
+                            >
+                                Strong Candidate
+                            </option>
+
+
+                            <option
+                                value="Good Candidate"
+                                {% if classification == "Good Candidate" %}selected{% endif %}
+                            >
+                                Good Candidate
+                            </option>
+
+
+                            <option
+                                value="Moderate Candidate"
+                                {% if classification == "Moderate Candidate" %}selected{% endif %}
+                            >
+                                Moderate Candidate
+                            </option>
+
+
+                            <option
+                                value="Weak Candidate"
+                                {% if classification == "Weak Candidate" %}selected{% endif %}
+                            >
+                                Weak Candidate
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PLAGIARISM -->
+
+                    <div class="filter-group">
+
+                        <label for="plagiarism_status">
+                            Plagiarism Status
+                        </label>
+
+                        <select
+                            name="plagiarism_status"
+                            id="plagiarism_status"
+                        >
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+
+                            <option
+                                value="Low Similarity"
+                                {% if plagiarism_status == "Low Similarity" %}selected{% endif %}
+                            >
+                                Low Similarity
+                            </option>
+
+
+                            <option
+                                value="Moderate Similarity"
+                                {% if plagiarism_status == "Moderate Similarity" %}selected{% endif %}
+                            >
+                                Moderate Similarity
+                            </option>
+
+
+                            <option
+                                value="High Similarity"
+                                {% if plagiarism_status == "High Similarity" %}selected{% endif %}
+                            >
+                                High Similarity
+                            </option>
+
+
+                            <option
+                                value="Very High Similarity"
+                                {% if plagiarism_status == "Very High Similarity" %}selected{% endif %}
+                            >
+                                Very High Similarity
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SCORE -->
+
+                    <div class="filter-group">
+
+                        <label for="score_range">
+                            Final Score
+                        </label>
+
+                        <select
+                            name="score_range"
+                            id="score_range"
+                        >
+
+                            <option value="">
+                                All Scores
+                            </option>
+
+
+                            <option
+                                value="80-100"
+                                {% if score_range == "80-100" %}selected{% endif %}
+                            >
+                                80 - 100
+                            </option>
+
+
+                            <option
+                                value="60-79"
+                                {% if score_range == "60-79" %}selected{% endif %}
+                            >
+                                60 - 79
+                            </option>
+
+
+                            <option
+                                value="40-59"
+                                {% if score_range == "40-59" %}selected{% endif %}
+                            >
+                                40 - 59
+                            </option>
+
+
+                            <option
+                                value="0-39"
+                                {% if score_range == "0-39" %}selected{% endif %}
+                            >
+                                0 - 39
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SORT -->
+
+                    <div class="filter-group">
+
+                        <label for="sort_by">
+                            Sort By
+                        </label>
+
+                        <select
+                            name="sort_by"
+                            id="sort_by"
+                        >
+
+                            <option
+                                value="newest"
+                                {% if sort_by == "newest" %}selected{% endif %}
+                            >
+                                Newest First
+                            </option>
+
+
+                            <option
+                                value="oldest"
+                                {% if sort_by == "oldest" %}selected{% endif %}
+                            >
+                                Oldest First
+                            </option>
+
+
+                            <option
+                                value="highest_score"
+                                {% if sort_by == "highest_score" %}selected{% endif %}
+                            >
+                                Highest Score
+                            </option>
+
+
+                            <option
+                                value="lowest_score"
+                                {% if sort_by == "lowest_score" %}selected{% endif %}
+                            >
+                                Lowest Score
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FILTER BUTTON -->
+
+                    <button
+                        type="submit"
+                        class="filter-button"
+                    >
+
+                        <i class="fas fa-filter"></i>
+
+                        Filter
+
+                    </button>
+
+
+                    <!-- CLEAR -->
+
+                    <a
+                        href="{{ url_for('admin.matching_results') }}"
+                        class="clear-filters-button"
+                    >
+
+                        <i class="fas fa-xmark"></i>
+
+                        Clear Filters
+
+                    </a>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             RESULTS HEADER
+        ========================= -->
+
+        <div class="action-row">
+
+            <p class="result-count">
+
+                Showing
+
+                <strong>
+                    {{ total_results }}
+                </strong>
+
+                matching result{% if total_results != 1 %}s{% endif %}
+
+            </p>
+
+
+            <a
+                href="{{ url_for(
+                    'admin.export_matching_results',
+                    classification=classification,
+                    plagiarism_status=plagiarism_status,
+                    score_range=score_range,
+                    sort_by=sort_by
+                ) }}"
+                class="export-button"
+            >
+
+                <i class="fas fa-file-csv"></i>
+
+                Export CSV
+
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+             RESULTS TABLE
+        ========================= -->
+
+        <div class="results-card">
+
+            {% if results %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Resume
+                            </th>
+
+                            <th>
+                                Job Description
+                            </th>
+
+                            <th>
+                                Final Score
+                            </th>
+
+                            <th>
+                                Classification
+                            </th>
+
+                            <th>
+                                Plagiarism
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for result in results %}
+
+                        <tr>
+
+
+                            <!-- ID -->
+
+                            <td class="id-cell">
+                                #{{ result.id }}
+                            </td>
+
+
+                            <!-- RESUME -->
+
+                            <td>
+
+                                <div class="resume-cell">
+
+                                    <div class="cell-icon">
+
+                                        <i class="fas fa-file-lines"></i>
+
+                                    </div>
+
+                                    <span class="cell-text"
+                                          title="{{ result.resume.filename }}">
+
+                                        {{ result.resume.filename }}
+
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- JOB DESCRIPTION -->
+
+                            <td>
+
+                                <div class="job-cell">
+
+                                    <div class="cell-icon">
+
+                                        <i class="fas fa-briefcase"></i>
+
+                                    </div>
+
+                                    <span class="cell-text"
+                                          title="{{ result.job_description.title }}">
+
+                                        {{ result.job_description.title }}
+
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- FINAL SCORE -->
+
+                            <td class="score">
+
+                                <span class="score-value">
+
+                                    {{ result.final_score }}%
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- CLASSIFICATION -->
+
+                            <td>
+
+                                {% if result.candidate_classification == "Strong Candidate" %}
+
+                                    <span class="classification-badge strong">
+                                        Strong Candidate
+                                    </span>
+
+                                {% elif result.candidate_classification == "Good Candidate" %}
+
+                                    <span class="classification-badge good">
+                                        Good Candidate
+                                    </span>
+
+                                {% elif result.candidate_classification == "Moderate Candidate" %}
+
+                                    <span class="classification-badge moderate">
+                                        Moderate Candidate
+                                    </span>
+
+                                {% elif result.candidate_classification == "Weak Candidate" %}
+
+                                    <span class="classification-badge weak">
+                                        Weak Candidate
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="classification-badge">
+                                        {{ result.candidate_classification }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- PLAGIARISM -->
+
+                            <td>
+
+                                <span class="plagiarism-value">
+
+                                    {{ result.plagiarism_score }}%
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td class="date-cell">
+
+                                {{ result.created_at }}
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a
+                                    class="view-link"
+                                    href="{{ url_for(
+                                        'admin.view_matching_result',
+                                        result_id=result.id
+                                    ) }}"
+                                >
+
+                                    <i class="fas fa-eye"></i>
+
+                                    View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =========================
+                 PAGINATION
+            ========================= -->
+
+            {% if pagination.pages > 1 %}
+
+            <div class="pagination">
+
+
+                {% if pagination.has_prev %}
+
+                <a
+                    href="{{ url_for(
+                        'admin.matching_results',
+                        page=pagination.prev_num,
+                        classification=classification,
+                        plagiarism_status=plagiarism_status,
+                        score_range=score_range,
+                        sort_by=sort_by
+                    ) }}"
+                >
+
+                    <i class="fas fa-chevron-left"></i>
+
+                </a>
+
+                {% endif %}
+
+
+                {% for page_num in pagination.iter_pages(
+                    left_edge=1,
+                    left_current=1,
+                    right_current=1,
+                    right_edge=1
+                ) %}
+
+
+                    {% if page_num %}
+
+                        {% if page_num == pagination.page %}
+
+                        <span class="current-page">
+                            {{ page_num }}
+                        </span>
+
+                        {% else %}
+
+                        <a
+                            href="{{ url_for(
+                                'admin.matching_results',
+                                page=page_num,
+                                classification=classification,
+                                plagiarism_status=plagiarism_status,
+                                score_range=score_range,
+                                sort_by=sort_by
+                            ) }}"
+                        >
+
+                            {{ page_num }}
+
+                        </a>
+
+                        {% endif %}
+
+
+                    {% else %}
+
+                        <span class="pagination-dots">
+                            ...
+                        </span>
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+                {% if pagination.has_next %}
+
+                <a
+                    href="{{ url_for(
+                        'admin.matching_results',
+                        page=pagination.next_num,
+                        classification=classification,
+                        plagiarism_status=plagiarism_status,
+                        score_range=score_range,
+                        sort_by=sort_by
+                    ) }}"
+                >
+
+                    <i class="fas fa-chevron-right"></i>
+
+                </a>
+
+                {% endif %}
+
+
+            </div>
+
+            {% endif %}
+
+
+            {% else %}
+
+            <!-- NO RESULTS -->
+
+            <div class="no-results">
+
+                <i class="fas fa-chart-column"></i>
+
+                No matching results found.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================
+             PAGE ACTIONS
+        ========================= -->
+
+        <div class="page-actions">
+
+            <a
+                href="{{ url_for('admin.dashboard') }}"
+                class="back-button"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Admin Dashboard
+
+            </a>
+
+
+            <a
+                href="{{ url_for('admin.matching_results') }}"
+                class="refresh-button"
+            >
+
+                <i class="fas fa-rotate-right"></i>
+
+                Refresh
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         CHART.JS
+    ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+
+        /* =========================
+           CLASSIFICATION CHART
+        ========================= */
+
+        const classificationChart =
+            document.getElementById("classificationChart");
+
+
+        if (classificationChart) {
+
+            const strongCandidates =
+                Number(classificationChart.dataset.strong);
+
+            const goodCandidates =
+                Number(classificationChart.dataset.good);
+
+            const moderateCandidates =
+                Number(classificationChart.dataset.moderate);
+
+            const weakCandidates =
+                Number(classificationChart.dataset.weak);
+
+
+            new Chart(classificationChart, {
+
+                type: "bar",
+
+                data: {
+
+                    labels: [
+                        "Strong Candidate",
+                        "Good Candidate",
+                        "Moderate Candidate",
+                        "Weak Candidate"
+                    ],
+
+                    datasets: [{
+
+                        label: "Number of Candidates",
+
+                        data: [
+                            strongCandidates,
+                            goodCandidates,
+                            moderateCandidates,
+                            weakCandidates
+                        ],
+
+                        backgroundColor: [
+                            "#10b981",
+                            "#3b82f6",
+                            "#f59e0b",
+                            "#ef4444"
+                        ],
+
+                        borderRadius: 6,
+
+                        borderSkipped: false
+
+                    }]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+
+        /* =========================
+           PLAGIARISM CHART
+        ========================= */
+
+        const plagiarismChart =
+            document.getElementById("plagiarismChart");
+
+
+        if (plagiarismChart) {
+
+            const lowSimilarity =
+                Number(plagiarismChart.dataset.low);
+
+            const moderateSimilarity =
+                Number(plagiarismChart.dataset.moderate);
+
+            const highSimilarity =
+                Number(plagiarismChart.dataset.high);
+
+            const veryHighSimilarity =
+                Number(plagiarismChart.dataset.veryHigh);
+
+
+            new Chart(plagiarismChart, {
+
+                type: "bar",
+
+                data: {
+
+                    labels: [
+                        "Low Similarity",
+                        "Moderate Similarity",
+                        "High Similarity",
+                        "Very High Similarity"
+                    ],
+
+                    datasets: [{
+
+                        label: "Number of Resumes",
+
+                        data: [
+                            lowSimilarity,
+                            moderateSimilarity,
+                            highSimilarity,
+                            veryHighSimilarity
+                        ],
+
+                        backgroundColor: [
+                            "#10b981",
+                            "#f59e0b",
+                            "#f97316",
+                            "#ef4444"
+                        ],
+
+                        borderRadius: 6,
+
+                        borderSkipped: false
+
+                    }]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+
+                        legend: {
+                            display: false
+                        }
+
+                    },
+
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+
+                            ticks: {
+                                precision: 0
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

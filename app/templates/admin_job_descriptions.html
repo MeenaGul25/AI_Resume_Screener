@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Job Descriptions - Admin Panel</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 15px;
+
+            overflow-y: auto;
+        }
+
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .admin-label {
+            font-size: 11px;
+            color: #9ca3af;
+
+            text-transform: uppercase;
+
+            margin: 20px 10px 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            color: #d1d5db;
+
+            text-decoration: none;
+
+            padding: 13px 15px;
+
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+
+
+        /* Sidebar icon colors */
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+
+        .nav-link.active i {
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+
+            min-height: 100vh;
+
+            padding: 35px 40px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 28px;
+
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: #ecfdf5;
+
+            color: #10b981;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        /* =========================
+           MAIN CARD
+        ========================= */
+
+        .card {
+            background: white;
+
+            border-radius: 14px;
+
+            border: 1px solid #e5e7eb;
+
+            padding: 25px;
+
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .card-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .card-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .card-title i {
+            color: #10b981;
+
+            font-size: 19px;
+        }
+
+
+        .card-title h2 {
+            margin: 0;
+
+            font-size: 19px;
+        }
+
+
+        .total-count {
+            font-size: 13px;
+
+            color: #6b7280;
+        }
+
+
+        .total-count strong {
+            color: #111827;
+        }
+
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-container {
+            margin-bottom: 25px;
+        }
+
+
+        .search-container form {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .search-box {
+            position: relative;
+
+            width: 350px;
+        }
+
+
+        .search-box i {
+            position: absolute;
+
+            left: 13px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #9ca3af;
+
+            font-size: 14px;
+        }
+
+
+        .search-container input {
+            width: 100%;
+
+            padding: 11px 13px 11px 38px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        .search-container input:focus {
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+
+        .search-container button {
+            padding: 11px 18px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            transition: 0.2s;
+        }
+
+
+        .search-container button:hover {
+            background: #1d4ed8;
+        }
+
+
+        .clear-btn {
+            padding: 10px 14px;
+
+            color: #6b7280;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            border-radius: 7px;
+        }
+
+
+        .clear-btn:hover {
+            background: #f3f4f6;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        thead {
+            background: #f9fafb;
+        }
+
+
+        th {
+            padding: 13px 15px;
+
+            text-align: left;
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+
+        td {
+            padding: 15px;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            font-size: 14px;
+
+            color: #374151;
+
+            vertical-align: middle;
+        }
+
+
+        tbody tr {
+            transition: 0.15s;
+        }
+
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* ID */
+
+        .id-cell {
+            color: #9ca3af;
+
+            font-size: 13px;
+
+            font-weight: 500;
+        }
+
+
+        /* Job title */
+
+        .job-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-weight: 600;
+
+            color: #111827;
+        }
+
+
+        .job-icon {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 8px;
+
+            background: #ecfdf5;
+
+            color: #10b981;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+
+        /* User */
+
+        .user-cell {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .user-cell i {
+            color: #9ca3af;
+
+            font-size: 13px;
+        }
+
+
+        /* Date */
+
+        .date-cell {
+            color: #6b7280;
+
+            font-size: 13px;
+        }
+
+
+        /* View button */
+
+        .view-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 8px 13px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            transition: 0.2s;
+        }
+
+
+        .view-btn:hover {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            text-align: center;
+
+            padding: 55px 20px;
+        }
+
+
+        .empty-icon {
+            width: 60px;
+            height: 60px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: #ecfdf5;
+
+            color: #10b981;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 25px;
+        }
+
+
+        .empty-state h3 {
+            margin: 0 0 7px;
+
+            font-size: 17px;
+
+            color: #374151;
+        }
+
+
+        .empty-state p {
+            margin: 0;
+
+            color: #9ca3af;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-container {
+            margin-top: 25px;
+        }
+
+
+        .back-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            text-decoration: none;
+
+            color: #6b7280;
+
+            font-size: 14px;
+
+            padding: 9px 12px;
+
+            border-radius: 7px;
+
+            transition: 0.2s;
+        }
+
+
+        .back-btn:hover {
+            background: #f3f4f6;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+
+                padding: 25px;
+            }
+
+            .search-box {
+                width: 280px;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-container form {
+                align-items: stretch;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+
+        <div class="admin-label">
+            Administrator Panel
+        </div>
+
+
+        <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="nav-link dashboard"
+        >
+            <i class="fas fa-house"></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.users') }}"
+            class="nav-link users"
+        >
+            <i class="fas fa-users"></i>
+
+            <span>
+                Users
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.resumes') }}"
+            class="nav-link resumes"
+        >
+            <i class="fas fa-file-lines"></i>
+
+            <span>
+                Resumes
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.job_descriptions') }}"
+            class="nav-link jobs active"
+        >
+            <i class="fas fa-briefcase"></i>
+
+            <span>
+                Job Descriptions
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.matching_results') }}"
+            class="nav-link matching"
+        >
+            <i class="fas fa-chart-column"></i>
+
+            <span>
+                Matching History
+            </span>
+
+        </a>
+
+
+        <div class="admin-label">
+            Account
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="nav-link logout"
+        >
+            <i class="fas fa-right-from-bracket"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Job Descriptions
+                </h1>
+
+                <p>
+                    Manage and review uploaded job descriptions
+                </p>
+
+            </div>
+
+
+            <div class="header-icon">
+
+                <i class="fas fa-briefcase"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN CARD -->
+
+        <div class="card">
+
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <i class="fas fa-briefcase"></i>
+
+                    <h2>
+                        Job Descriptions
+                    </h2>
+
+                </div>
+
+
+                <div class="total-count">
+
+                    Total Job Descriptions:
+
+                    <strong>
+                        {{ job_descriptions|length }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH -->
+
+            <div class="search-container">
+
+                <form
+                    method="GET"
+                    action="{{ url_for('admin.job_descriptions') }}"
+                >
+
+                    <div class="search-box">
+
+                        <i class="fas fa-magnifying-glass"></i>
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search by job title"
+                            value="{{ search }}"
+                        >
+
+                    </div>
+
+
+                    <button type="submit">
+
+                        <i class="fas fa-magnifying-glass"></i>
+
+                        Search
+
+                    </button>
+
+
+                    {% if search %}
+
+                    <a
+                        href="{{ url_for('admin.job_descriptions') }}"
+                        class="clear-btn"
+                    >
+
+                        <i class="fas fa-xmark"></i>
+
+                        Clear
+
+                    </a>
+
+                    {% endif %}
+
+                </form>
+
+            </div>
+
+
+            <!-- TABLE -->
+
+            {% if job_descriptions %}
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Job Title
+                            </th>
+
+                            <th>
+                                Created By
+                            </th>
+
+                            <th>
+                                Created At
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for job in job_descriptions %}
+
+                        <tr>
+
+                            <td class="id-cell">
+                                #{{ job.id }}
+                            </td>
+
+
+                            <td>
+
+                                <div class="job-title">
+
+                                    <div class="job-icon">
+
+                                        <i class="fas fa-briefcase"></i>
+
+                                    </div>
+
+                                    <span>
+                                        {{ job.title }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="user-cell">
+
+                                    <i class="fas fa-user"></i>
+
+                                    <span>
+                                        {{ job.user.name }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td class="date-cell">
+
+                                {{ job.uploaded_at }}
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{{ url_for('admin.view_job_description', job_id=job.id) }}"
+                                    class="view-btn"
+                                >
+
+                                    <i class="fas fa-eye"></i>
+
+                                    View
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+
+                    <i class="fas fa-briefcase"></i>
+
+                </div>
+
+
+                <h3>
+                    No job descriptions found
+                </h3>
+
+
+                <p>
+                    No job descriptions have been created yet.
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+            <!-- BACK -->
+
+            <div class="back-container">
+
+                <a
+                    href="{{ url_for('admin.dashboard') }}"
+                    class="back-btn"
+                >
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back to Admin Dashboard
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

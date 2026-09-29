@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Matching Result Details - Admin Panel</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #111827;
+            color: white;
+
+            padding: 25px 15px;
+
+            overflow-y: auto;
+        }
+
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .admin-label {
+            font-size: 11px;
+            color: #9ca3af;
+
+            text-transform: uppercase;
+
+            margin: 20px 10px 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            color: #d1d5db;
+
+            text-decoration: none;
+
+            padding: 13px 15px;
+
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+
+        .nav-link.active i {
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+
+            min-height: 100vh;
+
+            padding: 35px 40px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+            margin: 0;
+
+            font-size: 28px;
+
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin: 7px 0 0;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 12px;
+
+            background: #ecfeff;
+
+            color: #0891b2;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        /* =========================
+           CARDS
+        ========================= */
+
+        .card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 12px;
+
+            padding: 25px;
+
+            margin-bottom: 22px;
+
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.04);
+        }
+
+
+        .card-header {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .card-header i {
+            font-size: 18px;
+
+            color: #2563eb;
+        }
+
+
+        .card-header h2 {
+            margin: 0;
+
+            font-size: 18px;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           MATCH INFORMATION
+        ========================= */
+
+        .info-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 14px 0;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            font-size: 14px;
+        }
+
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .label {
+            font-weight: 600;
+
+            color: #6b7280;
+        }
+
+
+        .info-value {
+            color: #111827;
+
+            font-weight: 500;
+
+            text-align: right;
+        }
+
+
+        .id-badge {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            font-weight: 700;
+
+            font-size: 13px;
+        }
+
+
+        .resume-value,
+        .job-value {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        .resume-value i {
+            color: #f59e0b;
+        }
+
+
+        .job-value i {
+            color: #10b981;
+        }
+
+
+        /* =========================
+           FINAL RESULT
+        ========================= */
+
+        .final-card {
+            text-align: center;
+
+            padding: 35px 25px;
+        }
+
+
+        .final-icon {
+            width: 50px;
+            height: 50px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        .final-score {
+            font-size: 52px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+
+            margin: 5px 0 12px;
+        }
+
+
+        .classification {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: #ecfdf5;
+
+            color: #047857;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .recommendation-box {
+            margin: 20px auto 0;
+
+            max-width: 700px;
+
+            padding: 15px 18px;
+
+            border-radius: 9px;
+
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            color: #374151;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        .recommendation-label {
+            display: block;
+
+            margin-bottom: 6px;
+
+            color: #6b7280;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================
+           SCORE BREAKDOWN
+        ========================= */
+
+        .score-grid {
+            display: grid;
+
+            grid-template-columns: repeat(5, 1fr);
+
+            gap: 15px;
+        }
+
+
+        .score-item {
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 10px;
+
+            padding: 18px 12px;
+
+            text-align: center;
+        }
+
+
+        .score-item-icon {
+            width: 34px;
+            height: 34px;
+
+            margin: 0 auto 10px;
+
+            border-radius: 8px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 14px;
+        }
+
+
+        .score-item h3 {
+            margin: 0 0 9px;
+
+            font-size: 12px;
+
+            color: #6b7280;
+
+            line-height: 1.4;
+        }
+
+
+        .score-item-value {
+            font-size: 21px;
+
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+
+        .progress-bar {
+            width: 100%;
+
+            height: 5px;
+
+            margin-top: 11px;
+
+            background: #e5e7eb;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+            height: 100%;
+
+            background: #2563eb;
+
+            border-radius: 10px;
+
+            width: var(--progress-width);
+
+        }
+
+
+        /* =========================
+           PLAGIARISM
+        ========================= */
+
+        .plagiarism-card .card-header i {
+            color: #d97706;
+        }
+
+
+        .plagiarism-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+
+        .plagiarism-box {
+            padding: 20px;
+
+            border-radius: 10px;
+
+            background: #fffbeb;
+
+            border: 1px solid #fde68a;
+
+            text-align: center;
+        }
+
+
+        .plagiarism-box i {
+            font-size: 22px;
+
+            color: #d97706;
+
+            margin-bottom: 10px;
+        }
+
+
+        .plagiarism-label {
+            display: block;
+
+            color: #92400e;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+
+        .plagiarism-value {
+            font-size: 27px;
+
+            font-weight: bold;
+
+            color: #92400e;
+        }
+
+
+        .plagiarism-classification {
+            padding: 20px;
+
+            border-radius: 10px;
+
+            background: #f9fafb;
+
+            border: 1px solid #e5e7eb;
+
+            text-align: center;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        .plagiarism-classification i {
+            color: #6b7280;
+
+            font-size: 22px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .plagiarism-classification span {
+            color: #374151;
+
+            font-size: 15px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .page-actions {
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 25px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .action-button {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+
+        .back-button {
+            background: #eff6ff;
+
+            color: #2563eb;
+        }
+
+
+        .back-button:hover {
+            background: #dbeafe;
+        }
+
+
+        .dashboard-button {
+            background: #f3f4f6;
+
+            color: #4b5563;
+        }
+
+
+        .dashboard-button:hover {
+            background: #e5e7eb;
+
+            color: #111827;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+
+            .score-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+
+                padding: 25px;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+
+                min-height: auto;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+
+            .score-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+
+            .plagiarism-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .info-row {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 6px;
+            }
+
+
+            .info-value {
+                text-align: left;
+            }
+
+        }
+
+
+        @media (max-width: 450px) {
+
+            .score-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .final-score {
+                font-size: 42px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+
+        <div class="admin-label">
+            Administrator Panel
+        </div>
+
+
+        <a
+            href="{{ url_for('admin.dashboard') }}"
+            class="nav-link dashboard"
+        >
+            <i class="fas fa-house"></i>
+            <span>Dashboard</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.users') }}"
+            class="nav-link users"
+        >
+            <i class="fas fa-users"></i>
+            <span>Users</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.resumes') }}"
+            class="nav-link resumes"
+        >
+            <i class="fas fa-file-lines"></i>
+            <span>Resumes</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.job_descriptions') }}"
+            class="nav-link jobs"
+        >
+            <i class="fas fa-briefcase"></i>
+            <span>Job Descriptions</span>
+        </a>
+
+
+        <a
+            href="{{ url_for('admin.matching_results') }}"
+            class="nav-link matching active"
+        >
+            <i class="fas fa-chart-column"></i>
+            <span>Matching History</span>
+        </a>
+
+
+        <div class="admin-label">
+            Account
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="nav-link logout"
+        >
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Matching Result Details
+                </h1>
+
+                <p>
+                    Detailed analysis of the selected candidate matching result
+                </p>
+
+            </div>
+
+
+            <div class="header-icon">
+
+                <i class="fas fa-chart-column"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             MATCH INFORMATION
+        ========================= -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <i class="fas fa-circle-info"></i>
+
+                <h2>
+                    Match Information
+                </h2>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="label">
+                    Matching Result ID
+                </span>
+
+                <span class="info-value id-badge">
+                    #{{ result.id }}
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="label">
+                    Resume
+                </span>
+
+                <span class="info-value resume-value">
+
+                    <i class="fas fa-file-lines"></i>
+
+                    {{ result.resume.filename }}
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="label">
+                    Job Description
+                </span>
+
+                <span class="info-value job-value">
+
+                    <i class="fas fa-briefcase"></i>
+
+                    {{ result.job_description.title }}
+
+                </span>
+
+            </div>
+
+
+            <div class="info-row">
+
+                <span class="label">
+                    Analysis Date
+                </span>
+
+                <span class="info-value">
+
+                    <i class="fas fa-clock"></i>
+
+                    {{ result.created_at }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             FINAL RESULT
+        ========================= -->
+
+        <div class="card final-card">
+
+            <div class="final-icon">
+
+                <i class="fas fa-chart-simple"></i>
+
+            </div>
+
+
+            <div class="final-score">
+
+                {{ result.final_score }}%
+
+            </div>
+
+
+            <div class="classification">
+
+                {{ result.candidate_classification }}
+
+            </div>
+
+
+            <div class="recommendation-box">
+
+                <span class="recommendation-label">
+                    HR Recommendation
+                </span>
+
+                {{ result.hr_recommendation }}
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             SCORE BREAKDOWN
+        ========================= -->
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <i class="fas fa-chart-pie"></i>
+
+                <h2>
+                    Score Breakdown
+                </h2>
+
+            </div>
+
+
+            <div class="score-grid">
+
+
+                <!-- TF-IDF -->
+
+                <div class="score-item">
+
+                    <div class="score-item-icon">
+
+                        <i class="fas fa-file-lines"></i>
+
+                    </div>
+
+                    <h3>
+                        TF-IDF Similarity
+                    </h3>
+
+                    <div class="score-item-value">
+                        {{ result.tfidf_score }}%
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="--progress-width: {{ result.tfidf_score }}%;"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SBERT -->
+
+                <div class="score-item">
+
+                    <div class="score-item-icon">
+
+                        <i class="fas fa-brain"></i>
+
+                    </div>
+
+                    <h3>
+                        SBERT Semantic Similarity
+                    </h3>
+
+                    <div class="score-item-value">
+                        {{ result.semantic_score }}%
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="--progress-width: {{ result.semantic_score }}%;"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SKILLS -->
+
+                <div class="score-item">
+
+                    <div class="score-item-icon">
+
+                        <i class="fas fa-list-check"></i>
+
+                    </div>
+
+                    <h3>
+                        Skills Match
+                    </h3>
+
+                    <div class="score-item-value">
+                        {{ result.skills_score }}%
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="--progress-width: {{ result.skills_score }}%;"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EXPERIENCE -->
+
+                <div class="score-item">
+
+                    <div class="score-item-icon">
+
+                        <i class="fas fa-briefcase"></i>
+
+                    </div>
+
+                    <h3>
+                        Experience Score
+                    </h3>
+
+                    <div class="score-item-value">
+                        {{ result.experience_score }}%
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="--progress-width: {{ result.experience_score }}%;"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EDUCATION -->
+
+                <div class="score-item">
+
+                    <div class="score-item-icon">
+
+                        <i class="fas fa-graduation-cap"></i>
+
+                    </div>
+
+                    <h3>
+                        Education Score
+                    </h3>
+
+                    <div class="score-item-value">
+                        {{ result.education_score }}%
+                    </div>
+
+                    <div class="progress-bar">
+
+                        <div
+                            class="progress-fill"
+                            style="--progress-width: {{ result.education_score }}%;"
+                        >
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PLAGIARISM
+        ========================= -->
+
+        <div class="card plagiarism-card">
+
+            <div class="card-header">
+
+                <i class="fas fa-shield-halved"></i>
+
+                <h2>
+                    Plagiarism / Similarity Analysis
+                </h2>
+
+            </div>
+
+
+            <div class="plagiarism-grid">
+
+
+                <div class="plagiarism-box">
+
+                    <i class="fas fa-percent"></i>
+
+                    <span class="plagiarism-label">
+                        Similarity Score
+                    </span>
+
+                    <div class="plagiarism-value">
+                        {{ result.plagiarism_score }}%
+                    </div>
+
+                </div>
+
+
+                <div class="plagiarism-classification">
+
+                    <i class="fas fa-shield-halved"></i>
+
+                    <span>
+                        {{ result.plagiarism_classification }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PAGE ACTIONS
+        ========================= -->
+
+        <div class="page-actions">
+
+            <a
+                class="action-button back-button"
+                href="{{ url_for('admin.matching_results') }}"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Matching History
+
+            </a>
+
+
+            <a
+                class="action-button dashboard-button"
+                href="{{ url_for('admin.dashboard') }}"
+            >
+
+                <i class="fas fa-house"></i>
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

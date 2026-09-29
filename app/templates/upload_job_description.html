@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Job Description - AI Resume Screener</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+
+        /* ================= SIDEBAR ================= 
+
+        .sidebar {
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+
+            width: 240px;
+            height: 100vh;
+
+            background: #111827;
+
+            color: white;
+
+            padding: 25px 18px;
+        }
+
+
+        .logo {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            margin-bottom: 40px;
+
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .nav-title {
+
+            font-size: 11px;
+
+            color: #9ca3af;
+
+            text-transform: uppercase;
+
+            margin: 20px 10px 10px;
+
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+
+            display: block;
+
+            text-decoration: none;
+
+            color: #d1d5db;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 6px;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link:hover {
+
+            background: #1f2937;
+
+            color: white;
+        }
+
+
+        .nav-link.active {
+
+            background: #2563eb;
+
+            color: white;
+        }*/
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .logo span { color: #60a5fa; }
+
+        .nav-title {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-link:hover { background: #1f2937; color: white; }
+        .nav-link.active { background: #2563eb; color: white; }
+        .nav-link.dashboard i { color: #60a5fa; }
+        .nav-link.resumes i { color: #f59e0b; }
+        .nav-link.jobs i { color: #34d399; }
+        .nav-link.matching i { color: #22d3ee; }
+        .nav-link.logout i { color: #f87171; }
+        .nav-link.active i { color: white; }
+        .nav-link.logout { margin-top: 25px; }
+
+        /* Keep icons white when their menu item is active */
+
+        .nav-link.active i {
+            color: white;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+
+            margin-left: 240px;
+
+            padding: 35px 40px;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================= HEADER ================= */
+
+        .page-header {
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+
+            font-size: 28px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .page-header p {
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+
+        /* ================= CARD ================= */
+
+        .upload-card {
+
+            max-width: 850px;
+
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 35px;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .upload-icon {
+
+            width: 60px;
+
+            height: 60px;
+
+            border-radius: 12px;
+
+            background: #eff6ff;
+
+            color: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 28px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .upload-card h2 {
+
+            font-size: 20px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .upload-description {
+
+            color: #6b7280;
+
+            font-size: 14px;
+
+            margin-bottom: 25px;
+
+            line-height: 1.6;
+        }
+
+
+        /* ================= JOB TITLE ================= */
+
+        .form-group {
+
+            margin-bottom: 25px;
+        }
+
+
+        .form-label {
+
+            display: block;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            margin-bottom: 9px;
+        }
+
+
+        .job-title-input {
+
+            width: 100%;
+
+            padding: 12px 14px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        .job-title-input:focus {
+
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+
+        .job-title-input::placeholder {
+
+            color: #9ca3af;
+        }
+
+
+        /* ================= FILE AREA ================= */
+
+        .file-area {
+
+            border: 2px dashed #cbd5e1;
+
+            border-radius: 12px;
+
+            padding: 40px 25px;
+
+            text-align: center;
+
+            background: #f8fafc;
+
+            transition: 0.2s;
+
+            margin-bottom: 25px;
+        }
+
+
+        .file-area:hover {
+
+            border-color: #2563eb;
+
+            background: #eff6ff;
+        }
+
+
+        .file-area label {
+
+            display: inline-block;
+
+            cursor: pointer;
+        }
+
+
+        .file-title {
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+
+        .file-subtitle {
+
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .choose-btn {
+
+            display: inline-block;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .choose-btn:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        #job_description {
+
+            display: none;
+        }
+
+
+        /* ================= SELECTED FILE ================= */
+
+        .selected-file {
+
+            margin-top: 15px;
+
+            color: #2563eb;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .file-error {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: #fef2f2;
+            color: #b91c1c;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #fecaca;
+        }
+
+
+        /* ================= ACTIONS ================= */
+
+        .actions {
+
+            display: flex;
+
+            gap: 12px;
+
+            align-items: center;
+        }
+
+
+        .upload-btn {
+
+            border: none;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 11px 20px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .upload-btn:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        .back-btn {
+
+            display: inline-block;
+
+            text-decoration: none;
+
+            background: #e5e7eb;
+
+            color: #374151;
+
+            padding: 11px 18px;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        .back-btn:hover {
+
+            background: #d1d5db;
+        }
+
+
+        /* ================= MESSAGES ================= */
+
+        .messages {
+
+            margin-top: 20px;
+        }
+
+
+        .message {
+
+            padding: 12px 15px;
+
+            border-radius: 8px;
+
+            background: #ecfdf5;
+
+            color: #047857;
+
+            border: 1px solid #a7f3d0;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+
+                position: relative;
+
+                width: 100%;
+
+                height: auto;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                padding: 25px;
+            }
+
+
+            .upload-card {
+
+                padding: 25px;
+            }
+
+
+            .actions {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+        <div class="nav-title">Main</div>
+
+        <a href="{{ url_for('main.dashboard') }}" class="nav-link dashboard ">
+            <i class="fas fa-house"></i><span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('resume.upload_resume') }}" class="nav-link resumes">
+            <i class="fas fa-file-lines"></i><span>Resumes</span>
+        </a>
+        <a href="{{ url_for('job.upload_job_description') }}" class="nav-link jobs active">
+            <i class="fas fa-briefcase"></i><span>Job Descriptions</span>
+        </a>
+        <a href="{{ url_for('matching.match_resume') }}" class="nav-link matching">
+            <i class="fas fa-magnifying-glass"></i><span>Resume Matching</span>
+        </a>
+
+        <div class="nav-title">Account</div>
+
+        <a href="{{ url_for('auth.logout') }}" class="nav-link logout">
+            <i class="fas fa-right-from-bracket"></i><span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main">
+
+
+        <div class="page-header">
+
+            <h1>Upload Job Description</h1>
+
+            <p>
+                Add a job position and its requirements for AI-powered candidate screening.
+            </p>
+
+        </div>
+
+
+        <div class="upload-card">
+
+
+            <div class="upload-icon">
+                💼
+            </div>
+
+
+            <h2>Job Position Details</h2>
+
+
+            <p class="upload-description">
+
+                Enter the job title and upload the corresponding
+                job description in PDF or DOCX format.
+
+            </p>
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+
+                <!-- JOB TITLE -->
+
+                <div class="form-group">
+
+                    <label
+                        for="title"
+                        class="form-label"
+                    >
+                        Job Title
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="job-title-input"
+                        placeholder="e.g. Python Developer"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- FILE UPLOAD -->
+
+                <div class="form-group">
+
+                    <label class="form-label">
+                        Job Description File
+                    </label>
+
+
+                    <div class="file-area">
+
+
+                        <label for="job_description">
+
+                            <div class="file-title">
+                                Choose a job description
+                            </div>
+
+
+                            <div class="file-subtitle">
+                                Supported formats: PDF and DOCX
+                            </div>
+
+
+                            <span class="choose-btn">
+                                Browse Files
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="file"
+                            id="job_description"
+                            name="job_description"
+                            accept=".pdf,.docx"
+                             
+                        >
+
+
+                        <div
+                            id="selected-file"
+                            class="selected-file"
+                        ></div>
+
+                        <div
+                            id="file-error"
+                            class="file-error"
+                            style="display: none;"
+                        >
+                            Please select a job description file before uploading.
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="actions">
+
+                    <button
+                        type="submit"
+                        class="upload-btn"
+                    >
+                        Upload Job Description
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('main.dashboard') }}"
+                        class="back-btn"
+                    >
+                        Back to Dashboard
+                    </a>
+
+                </div>
+
+
+            </form>
+
+
+            <!-- FLASH MESSAGES -->
+
+            {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                    <div class="messages">
+
+                        {% for message in messages %}
+
+                            <div class="message">
+                                {{ message }}
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endwith %}
+
+
+        </div>
+
+
+    </main>
+
+
+    <!-- ================= FILE NAME SCRIPT ================= -->
+
+    <script>
+
+        const form = document.querySelector("form");
+
+        const fileInput =
+            document.getElementById("job_description");
+
+        const selectedFile =
+            document.getElementById("selected-file");
+
+        const fileError =
+            document.getElementById("file-error");
+
+
+        fileInput.addEventListener("change", function () {
+
+            if (this.files.length > 0) {
+
+                selectedFile.textContent =
+                    "Selected file: " + this.files[0].name;
+
+                fileError.style.display = "none";
+
+            } else {
+
+                selectedFile.textContent = "";
+
+            }
+
+        });
+
+
+        form.addEventListener("submit", function (event) {
+
+            if (fileInput.files.length === 0) {
+
+                event.preventDefault();
+
+                fileError.textContent =
+                    "Please select a job description file before uploading.";
+
+                fileError.style.display = "block";
+
+                return;
+
+            }
+
+            fileError.style.display = "none";
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>

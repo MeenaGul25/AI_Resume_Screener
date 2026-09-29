@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Details - Admin Panel</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================== */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .admin-label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+
+        .nav-link.active i {
+            color: white;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================== */
+
+        .main-content {
+            margin-left: 240px;
+            padding: 35px 40px;
+            min-height: 100vh;
+        }
+
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           RESUME INFORMATION CARD
+        ========================== */
+
+        .detail-card {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+        }
+
+
+        .resume-heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+
+        .resume-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #fff7ed;
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+
+        .resume-heading h2 {
+            margin: 0;
+            font-size: 21px;
+            color: #111827;
+            word-break: break-word;
+        }
+
+
+        .resume-heading p {
+            margin: 5px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           INFORMATION GRID
+        ========================== */
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+
+        .info-item {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+
+        .info-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+
+        .info-label i {
+            color: #f59e0b;
+        }
+
+
+        .info-value {
+            font-size: 15px;
+            color: #111827;
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           EXTRACTED RESUME TEXT
+        ========================== */
+
+        .resume-text-card {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        }
+
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+
+        .section-header i {
+            color: #f59e0b;
+            font-size: 21px;
+        }
+
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #111827;
+        }
+
+
+        .resume-text {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 22px;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #374151;
+            max-height: 650px;
+            overflow-y: auto;
+        }
+
+
+        .no-text {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            border-radius: 10px;
+            padding: 18px;
+            font-size: 14px;
+        }
+
+
+        .no-text i {
+            margin-right: 8px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
+        .button-area {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+
+        .btn-back {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        .btn-back:hover {
+            background: #1d4ed8;
+        }
+
+
+        .btn-dashboard {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+
+        .btn-dashboard:hover {
+            background: #d1d5db;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+                padding: 25px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-area {
+                flex-direction: column;
+            }
+
+            .btn {
+                justify-content: center;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+
+        <div class="admin-label">
+            Administrator Panel
+        </div>
+
+
+        <a href="{{ url_for('admin.dashboard') }}"
+           class="nav-link dashboard">
+
+            <i class="fas fa-house"></i>
+
+            <span>Dashboard</span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.users') }}"
+           class="nav-link users">
+
+            <i class="fas fa-users"></i>
+
+            <span>Users</span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.resumes') }}"
+           class="nav-link resumes active">
+
+            <i class="fas fa-file-lines"></i>
+
+            <span>Resumes</span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.job_descriptions') }}"
+           class="nav-link jobs">
+
+            <i class="fas fa-briefcase"></i>
+
+            <span>Job Descriptions</span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.matching_results') }}"
+           class="nav-link matching">
+
+            <i class="fas fa-chart-column"></i>
+
+            <span>Matching History</span>
+
+        </a>
+
+
+        <div class="admin-label">
+            Account
+        </div>
+
+
+        <a href="{{ url_for('auth.logout') }}"
+           class="nav-link logout">
+
+            <i class="fas fa-right-from-bracket"></i>
+
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <div class="main-content">
+
+
+        <div class="page-header">
+
+            <h1>
+                Resume Details
+            </h1>
+
+            <p>
+                View resume information and extracted resume content.
+            </p>
+
+        </div>
+
+
+
+        <!-- RESUME INFORMATION -->
+
+        <div class="detail-card">
+
+
+            <div class="resume-heading">
+
+                <div class="resume-icon">
+
+                    <i class="fas fa-file-lines"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h2>
+                        {{ resume.filename }}
+                    </h2>
+
+                    <p>
+                        Resume information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="info-grid">
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+
+                        <i class="fas fa-hashtag"></i>
+
+                        Resume ID
+
+                    </div>
+
+
+                    <div class="info-value">
+
+                        {{ resume.id }}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+
+                        <i class="fas fa-user"></i>
+
+                        Uploaded By
+
+                    </div>
+
+
+                    <div class="info-value">
+
+                        {{ resume.user.name }}
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="info-item">
+
+                    <div class="info-label">
+
+                        <i class="fas fa-calendar"></i>
+
+                        Uploaded At
+
+                    </div>
+
+
+                    <div class="info-value">
+
+                        {{ resume.uploaded_at }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+
+        <!-- EXTRACTED RESUME TEXT -->
+
+        <div class="resume-text-card">
+
+
+            <div class="section-header">
+
+                <i class="fas fa-file-lines"></i>
+
+                <h2>
+                    Extracted Resume Text
+                </h2>
+
+            </div>
+
+
+
+            {% if resume.extracted_text %}
+
+                <div class="resume-text">
+
+                    {{ resume.extracted_text }}
+
+                </div>
+
+            {% else %}
+
+                <div class="no-text">
+
+                    <i class="fas fa-circle-exclamation"></i>
+
+                    No extracted text is available.
+
+                </div>
+
+            {% endif %}
+
+
+
+            <div class="button-area">
+
+
+                <a class="btn btn-back"
+                   href="{{ url_for('admin.resumes') }}">
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    Back to Resumes
+
+                </a>
+
+
+                <a class="btn btn-dashboard"
+                   href="{{ url_for('admin.dashboard') }}">
+
+                    <i class="fas fa-house"></i>
+
+                    Dashboard
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

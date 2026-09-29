@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Match Result - AI Resume Screener</title>
+
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .logo span { color: #60a5fa; }
+
+        .nav-title {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #d1d5db;
+            text-decoration: none;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-link:hover { background: #1f2937; color: white; }
+        .nav-link.active { background: #2563eb; color: white; }
+        .nav-link.dashboard i { color: #60a5fa; }
+        .nav-link.resumes i { color: #f59e0b; }
+        .nav-link.jobs i { color: #34d399; }
+        .nav-link.matching i { color: #22d3ee; }
+        .nav-link.logout i { color: #f87171; }
+        .nav-link.active i { color: white; }
+        .nav-link.logout { margin-top: 25px; }
+
+        /* Keep icons white when their menu item is active */
+
+        .nav-link.active i {
+            color: white;
+        }
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px 40px 50px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        /* =========================
+           CANDIDATE HEADER
+        ========================= */
+
+        .candidate-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px 25px;
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .candidate-card h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .candidate-card p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        /* =========================
+           FINAL SCORE
+        ========================= */
+
+        .score-section {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        .score-section h2 {
+            margin: 0 0 20px;
+            font-size: 20px;
+        }
+
+        .score-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            border: 12px solid #2563eb;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: #f8fbff;
+        }
+
+        .score-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .score-label {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .classification {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 20px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .recommendation-box {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 18px 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .recommendation-box h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+        }
+
+        .recommendation-box p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           SECTION CARDS
+        ========================= */
+
+        .section-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            margin: 0 0 22px;
+            font-size: 20px;
+            color: #111827;
+        }
+
+        /* =========================
+           SCORE BREAKDOWN
+        ========================= */
+
+        .score-row {
+            margin-bottom: 20px;
+        }
+
+        .score-row-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            font-size: 14px;
+        }
+
+        .score-row-header strong {
+            color: #111827;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 11px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: #2563eb;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* =========================
+           SKILL SUMMARY
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .summary-box {
+            padding: 20px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .summary-box h3 {
+            margin: 0 0 10px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .summary-box p {
+            margin: 0;
+            font-size: 27px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        /* =========================
+           SKILL LISTS
+        ========================= */
+
+        .skill-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .skill-box {
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .skill-box h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .skill-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .skill-box li {
+            margin-bottom: 9px;
+        }
+
+        .matched-title {
+            color: #15803d;
+        }
+
+        .missing-title {
+            color: #dc2626;
+        }
+
+        .semantic-list {
+            margin-top: 20px;
+        }
+
+        .semantic-list li {
+            margin-bottom: 10px;
+        }
+
+        /* =========================
+           ANALYSIS GRID
+        ========================= */
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .analysis-box {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .analysis-box h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .analysis-item {
+            margin-bottom: 12px;
+        }
+
+        .analysis-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement-met {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .requirement-not-met {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        /* =========================
+           STRENGTHS / WEAKNESSES
+        ========================= */
+
+        .strength-weakness-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .strength-box,
+        .weakness-box {
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .strength-box h3 {
+            color: #15803d;
+            margin-top: 0;
+        }
+
+        .weakness-box h3 {
+            color: #dc2626;
+            margin-top: 0;
+        }
+
+        .strength-box li,
+        .weakness-box li {
+            margin-bottom: 10px;
+        }
+
+        /* =========================
+           PLAGIARISM
+        ========================= */
+
+        .plagiarism-info {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .plagiarism-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 13px;
+        }
+
+        .plagiarism-warning {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border-radius: 8px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            color: #9a3412;
+            font-weight: bold;
+        }
+
+        .plagiarism-safe {
+            margin-top: 20px;
+            padding: 13px 15px;
+            border-radius: 8px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .plagiarism-progress {
+            height: 100%;
+            width: 0%;
+            background: #f97316;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .skill-columns,
+            .analysis-grid,
+            .strength-weakness-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+        SIDEBAR
+    ========================= -->
+
+   <aside class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+        <div class="nav-title">Main</div>
+
+        <a href="{{ url_for('main.dashboard') }}" class="nav-link dashboard">
+            <i class="fas fa-house"></i><span>Dashboard</span>
+        </a>
+        <a href="{{ url_for('resume.upload_resume') }}" class="nav-link resumes">
+            <i class="fas fa-file-lines"></i><span>Resumes</span>
+        </a>
+        <a href="{{ url_for('job.upload_job_description') }}" class="nav-link jobs">
+            <i class="fas fa-briefcase"></i><span>Job Descriptions</span>
+        </a>
+        <a href="{{ url_for('matching.match_resume') }}" class="nav-link matching active">
+            <i class="fas fa-magnifying-glass"></i><span>Resume Matching</span>
+        </a>
+
+        <div class="nav-title">Account</div>
+
+        <a href="{{ url_for('auth.logout') }}" class="nav-link logout">
+            <i class="fas fa-right-from-bracket"></i><span>Logout</span>
+        </a>
+
+    </aside>
+
+
+    <!-- =========================
+        MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <div class="page-header">
+
+            <h1>
+                Resume Matching Result
+            </h1>
+
+            <p>
+                AI-powered analysis of candidate suitability for the selected job.
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+            CANDIDATE INFORMATION
+        ========================= -->
+
+        <div class="candidate-card">
+
+            <h2>
+                {{ resume.filename }}
+            </h2>
+
+            <p>
+                Job Description:
+                <strong>
+                    {{ job_description.title }}
+                </strong>
+            </p>
+
+        </div>
+
+
+        <!-- =========================
+            FINAL SCORE
+        ========================= -->
+
+        <div class="score-section">
+
+            <h2>
+                Overall Match Score
+            </h2>
+
+            <div class="score-circle">
+
+                <div class="score-number">
+                    {{ score }}%
+                </div>
+
+                <div class="score-label">
+                    Match
+                </div>
+
+            </div>
+
+
+            <div class="classification">
+                {{ candidate_classification }}
+            </div>
+
+
+            <div class="recommendation-box">
+
+                <h3>
+                    HR Recommendation
+                </h3>
+
+                <p>
+                    {{ hr_recommendation }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+    <!-- =========================
+         SCORE BREAKDOWN
+    ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Score Breakdown
+        </h2>
+
+
+        <div class="score-row">
+
+            <div class="score-row-header">
+
+                <span>
+                    SBERT Semantic Similarity
+                </span>
+
+                <strong>
+                    {{ semantic_score }}%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress"
+                     data-width="{{ semantic_score }}">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="score-row">
+
+            <div class="score-row-header">
+
+                <span>
+                    Skills Match
+                </span>
+
+                <strong>
+                    {{ skills_score }}%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress"
+                     data-width="{{ skills_score }}">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="score-row">
+
+            <div class="score-row-header">
+
+                <span>
+                    TF-IDF Similarity
+                </span>
+
+                <strong>
+                    {{ tfidf_score }}%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress"
+                     data-width="{{ tfidf_score }}">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="score-row">
+
+            <div class="score-row-header">
+
+                <span>
+                    Experience
+                </span>
+
+                <strong>
+                    {{ experience_score }}%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress"
+                     data-width="{{ experience_score }}">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="score-row">
+
+            <div class="score-row-header">
+
+                <span>
+                    Education
+                </span>
+
+                <strong>
+                    {{ education_score }}%
+                </strong>
+
+            </div>
+
+            <div class="progress-bar">
+
+                <div class="progress"
+                     data-width="{{ education_score }}">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SKILL ANALYSIS
+    ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Skill Analysis
+        </h2>
+
+
+        <div class="summary-grid">
+
+            <div class="summary-box">
+
+                <h3>
+                    Required Skills
+                </h3>
+
+                <p>
+                    {{ required_skills|length }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h3>
+                    Matched Skills
+                </h3>
+
+                <p>
+                    {{ matched_skills|length }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h3>
+                    Missing Skills
+                </h3>
+
+                <p>
+                    {{ missing_skills|length }}
+                </p>
+
+            </div>
+
+
+            <div class="summary-box">
+
+                <h3>
+                    Skills Match
+                </h3>
+
+                <p>
+                    {{ skills_score }}%
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="skill-columns">
+
+
+            {% if matched_skills %}
+
+            <div class="skill-box">
+
+                <h3 class="matched-title">
+                    ✓ Matched Skills
+                </h3>
+
+                <ul>
+
+                    {% for skill in matched_skills %}
+
+                        <li>
+                            {{ skill }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+
+            {% if missing_skills %}
+
+            <div class="skill-box">
+
+                <h3 class="missing-title">
+                    ✗ Missing Skills
+                </h3>
+
+                <ul>
+
+                    {% for skill in missing_skills %}
+
+                        <li>
+                            {{ skill }}
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if semantic_matches %}
+
+        <div class="semantic-list">
+
+            <h3>
+                Semantic Skill Matches
+            </h3>
+
+            <ul>
+
+                {% for match in semantic_matches %}
+
+                    <li>
+
+                        ✓
+
+                        <strong>
+                            {{ match["required_skill"] }}
+                        </strong>
+
+                        →
+
+                        {{ match["matched_skill"] }}
+
+                        <strong>
+                            ({{ match["similarity"] }}% similarity)
+                        </strong>
+
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =========================
+         EXPERIENCE & EDUCATION
+    ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Candidate Qualification Analysis
+        </h2>
+
+
+        <div class="analysis-grid">
+
+
+            <!-- EXPERIENCE -->
+
+            <div class="analysis-box">
+
+                <h3>
+                    Experience
+                </h3>
+
+                <div class="analysis-item">
+
+                    Required Experience:
+
+                    <strong>
+                        {{ experience_analysis.required_years }}
+                        years
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    Candidate Experience:
+
+                    <strong>
+                        {{ experience_analysis.candidate_years }}
+                        years
+                    </strong>
+
+                </div>
+
+
+                {% if experience_analysis.meets_requirement %}
+
+                    <div class="analysis-item requirement-met">
+                        ✓ Experience requirement met
+                    </div>
+
+                {% else %}
+
+                    <div class="analysis-item requirement-not-met">
+                        ✗ Experience requirement not met
+                    </div>
+
+                {% endif %}
+
+
+                <div class="analysis-item">
+
+                    Experience Score:
+
+                    <strong>
+                        {{ experience_score }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- EDUCATION -->
+
+            <div class="analysis-box">
+
+                <h3>
+                    Education
+                </h3>
+
+
+                <div class="analysis-item">
+
+                    Required Education:
+
+                    <strong>
+                        {{ education_analysis.required_education
+                        or "Not specified" }}
+                    </strong>
+
+                </div>
+
+
+                <div class="analysis-item">
+
+                    Candidate Education:
+
+                    <strong>
+                        {{ education_analysis.candidate_education
+                        or "Not detected" }}
+                    </strong>
+
+                </div>
+
+
+                {% if education_analysis.meets_requirement %}
+
+                    <div class="analysis-item requirement-met">
+                        ✓ Education requirement met
+                    </div>
+
+                {% else %}
+
+                    <div class="analysis-item requirement-not-met">
+                        ✗ Education requirement not met
+                    </div>
+
+                {% endif %}
+
+
+                <div class="analysis-item">
+
+                    Education Score:
+
+                    <strong>
+                        {{ education_score }}%
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PLAGIARISM
+    ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Resume Similarity / Plagiarism Analysis
+        </h2>
+
+
+        {% if most_similar_resume %}
+
+            <div class="plagiarism-info">
+
+
+                <div class="plagiarism-row">
+
+                    <span>
+                        Most Similar Resume
+                    </span>
+
+                    <strong>
+                        {{ most_similar_resume.filename }}
+                    </strong>
+
+                </div>
+
+
+                <div class="plagiarism-row">
+
+                    <span>
+                        Similarity Score
+                    </span>
+
+                    <strong>
+                        {{ plagiarism_score }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="plagiarism-row">
+
+                    <span>
+                        Classification
+                    </span>
+
+                    <strong>
+                        {{ plagiarism_classification }}
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div class="plagiarism-progress"
+                         data-width="{{ plagiarism_score }}">
+                    </div>
+
+                </div>
+
+
+                {% if plagiarism_score >= 70 %}
+
+                    <div class="plagiarism-warning">
+                        ⚠ High similarity detected.
+                    </div>
+
+                    <p>
+                        The resume contains a high level of textual
+                        similarity with another stored resume.
+                    </p>
+
+
+                {% elif plagiarism_score >= 40 %}
+
+                    <div class="plagiarism-warning">
+                        ⚠ Moderate similarity detected.
+                    </div>
+
+                    <p>
+                        Some significant textual similarity was found.
+                    </p>
+
+
+                {% else %}
+
+                    <div class="plagiarism-safe">
+                        ✓ Low similarity detected.
+                    </div>
+
+                    <p>
+                        No significant textual similarity was detected.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="plagiarism-info">
+
+                <p>
+                    No other resumes are available for comparison.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- =========================
+         STRENGTHS & WEAKNESSES
+    ========================= -->
+
+    <div class="section-card">
+
+        <h2 class="section-title">
+            Candidate Strengths & Weaknesses
+        </h2>
+
+
+        <div class="strength-weakness-grid">
+
+
+            <div class="strength-box">
+
+                <h3>
+                    ✓ Strengths
+                </h3>
+
+
+                {% if strengths %}
+
+                    <ul>
+
+                        {% for strength in strengths %}
+
+                            <li>
+                                {{ strength }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <p>
+                        No specific strengths identified.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="weakness-box">
+
+                <h3>
+                    ✗ Weaknesses
+                </h3>
+
+
+                {% if weaknesses %}
+
+                    <ul>
+
+                        {% for weakness in weaknesses %}
+
+                            <li>
+                                {{ weakness }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                {% else %}
+
+                    <p>
+                        No significant weaknesses identified.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         ACTION BUTTONS
+    ========================= -->
+
+    <div class="actions">
+
+        <a href="{{ url_for('matching.match_resume') }}"
+           class="btn btn-primary">
+            Match Another Resume
+        </a>
+
+
+        <a href="{{ url_for('main.dashboard') }}"
+           class="btn btn-secondary">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+    document.querySelectorAll(".progress").forEach(function(bar) {
+
+        let width = parseFloat(bar.dataset.width);
+
+        if (isNaN(width)) {
+            width = 0;
+        }
+
+        if (width < 0) {
+            width = 0;
+        }
+
+        if (width > 100) {
+            width = 100;
+        }
+
+        bar.style.width = width + "%";
+
+    });
+
+
+    document.querySelectorAll(".plagiarism-progress").forEach(function(bar) {
+
+        let width = parseFloat(bar.dataset.width);
+
+        if (isNaN(width)) {
+            width = 0;
+        }
+
+        if (width < 0) {
+            width = 0;
+        }
+
+        if (width > 100) {
+            width = 100;
+        }
+
+        bar.style.width = width + "%";
+
+    });
+
+</script>
+
+
+</body>
+
+</html>

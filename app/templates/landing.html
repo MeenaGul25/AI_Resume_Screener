@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Screener - Intelligent Recruitment</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #111827;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
+        .navbar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 22px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+
+        .nav-links a {
+            color: #dbeafe;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+
+        .nav-login {
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+
+        .nav-login:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+
+        /* =====================================================
+           HERO
+        ====================================================== */
+
+        .hero {
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(
+                    circle at 75% 40%,
+                    rgba(37,99,235,0.35),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #0f172a 0%,
+                    #111827 45%,
+                    #172554 100%
+                );
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 120px 7% 80px;
+        }
+
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border: 1px solid rgba(96,165,250,0.12);
+            border-radius: 50%;
+            right: -120px;
+            top: 80px;
+        }
+
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border: 1px solid rgba(96,165,250,0.10);
+            border-radius: 50%;
+            right: -40px;
+            top: 155px;
+        }
+
+
+        .hero-content {
+            width: 52%;
+            position: relative;
+            z-index: 2;
+        }
+
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(59,130,246,0.12);
+            border: 1px solid rgba(96,165,250,0.25);
+            color: #93c5fd;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+
+        .hero-badge i {
+            color: #60a5fa;
+        }
+
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.08;
+            letter-spacing: -2px;
+            margin-bottom: 25px;
+        }
+
+
+        .hero h1 span {
+            color: #60a5fa;
+        }
+
+
+        .hero-description {
+            max-width: 620px;
+            color: #cbd5e1;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+        }
+
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 10px 25px rgba(37,99,235,0.3);
+        }
+
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+
+        .btn-secondary {
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+        }
+
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+
+        /* =====================================================
+           AI VISUAL
+        ====================================================== */
+
+        .hero-visual {
+            width: 48%;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+
+        .ai-panel {
+            width: 460px;
+            background: rgba(15,23,42,0.75);
+            border: 1px solid rgba(148,163,184,0.2);
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.4),
+                inset 0 1px rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+        }
+
+
+        .panel-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+
+        .panel-title i {
+            color: #60a5fa;
+        }
+
+
+        .status {
+            font-size: 11px;
+            color: #34d399;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34d399;
+        }
+
+
+        .resume-preview {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 18px;
+            color: #334155;
+            margin-bottom: 18px;
+        }
+
+
+        .resume-header {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+
+        .resume-avatar {
+            width: 38px;
+            height: 38px;
+            background: #dbeafe;
+            color: #2563eb;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        .resume-name {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        .resume-role {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 3px;
+        }
+
+
+        .resume-line {
+            height: 7px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+
+        .resume-line.short {
+            width: 60%;
+        }
+
+
+        .resume-line.medium {
+            width: 78%;
+        }
+
+
+        .analysis-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+
+        .analysis-card {
+            flex: 1;
+            background: #1e293b;
+            border-radius: 9px;
+            padding: 15px;
+        }
+
+
+        .analysis-card i {
+            color: #60a5fa;
+            margin-bottom: 8px;
+        }
+
+
+        .analysis-label {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+
+        .analysis-value {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+
+        .score-bar {
+            height: 7px;
+            background: #334155;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+
+        .score-fill {
+            height: 100%;
+            width: 87%;
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+
+        /* =====================================================
+           TRUST STRIP
+        ====================================================== */
+
+        .trust-strip {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 25px 7%;
+        }
+
+
+        .trust-content {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        .trust-item i {
+            color: #2563eb;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ====================================================== */
+
+        .section {
+            padding: 90px 7%;
+        }
+
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 55px;
+        }
+
+
+        .section-label {
+            color: #2563eb;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+
+        .section-header h2 {
+            font-size: 36px;
+            color: #111827;
+            margin-bottom: 15px;
+        }
+
+
+        .section-header p {
+            color: #6b7280;
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+
+        /* =====================================================
+           FEATURES
+        ====================================================== */
+
+        .features {
+            background: #f8fafc;
+        }
+
+
+        .feature-grid {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+
+        .feature-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 28px;
+            transition: 0.25s;
+        }
+
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+
+        .feature-card h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.7;
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           HOW IT WORKS
+        ====================================================== */
+
+        .steps {
+            max-width: 1050px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+
+        .step-number {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #eff6ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+
+        .step h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+
+        .step p {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           AI CAPABILITIES
+        ====================================================== */
+
+        .capabilities {
+            background: #111827;
+            color: white;
+        }
+
+
+        .capability-layout {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+
+        .capability-text h2 {
+            font-size: 36px;
+            margin-bottom: 18px;
+        }
+
+
+        .capability-text > p {
+            color: #9ca3af;
+            line-height: 1.7;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+
+        .capability-list {
+            list-style: none;
+        }
+
+
+        .capability-list li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            color: #d1d5db;
+            font-size: 14px;
+        }
+
+
+        .capability-list i {
+            color: #60a5fa;
+            margin-top: 3px;
+        }
+
+
+        .metrics-panel {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 16px;
+            padding: 28px;
+        }
+
+
+        .metric {
+            margin-bottom: 22px;
+        }
+
+
+        .metric:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .metric-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+
+        .metric-name {
+            color: #d1d5db;
+        }
+
+
+        .metric-value {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+
+        .metric-bar {
+            height: 8px;
+            background: #374151;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+
+        .metric-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 10px;
+        }
+
+
+        .metric-fill.one {
+            width: 92%;
+        }
+
+
+        .metric-fill.two {
+            width: 87%;
+        }
+
+
+        .metric-fill.three {
+            width: 81%;
+        }
+
+
+        .metric-fill.four {
+            width: 94%;
+        }
+
+
+        /* =====================================================
+           CTA
+        ====================================================== */
+
+        .cta {
+            padding: 90px 7%;
+            text-align: center;
+            background: #f8fafc;
+        }
+
+
+        .cta-box {
+            max-width: 900px;
+            margin: auto;
+            background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(96,165,250,0.2),
+                    transparent 35%
+                ),
+                #172554;
+            border-radius: 20px;
+            padding: 60px 30px;
+            color: white;
+        }
+
+
+        .cta-box h2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+
+        .cta-box p {
+            color: #bfdbfe;
+            max-width: 600px;
+            margin: 0 auto 28px;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            padding: 30px 7%;
+        }
+
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+
+        .footer-logo {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+
+        .footer-logo span {
+            color: #60a5fa;
+        }
+
+
+        .footer-text {
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 1000px) {
+
+            .hero {
+                padding-top: 130px;
+            }
+
+            .hero-content {
+                width: 100%;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 35px;
+            }
+
+        }
+
+
+        @media (max-width: 800px) {
+
+            .navbar {
+                padding: 20px 5%;
+            }
+
+            .nav-links a:not(.nav-login) {
+                display: none;
+            }
+
+            .hero {
+                padding-left: 6%;
+                padding-right: 6%;
+                min-height: 650px;
+            }
+
+            .hero h1 {
+                font-size: 43px;
+            }
+
+            .capability-layout {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 65px 6%;
+            }
+
+            .section-header h2 {
+                font-size: 29px;
+            }
+
+            .cta-box h2 {
+                font-size: 29px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+====================================================== -->
+
+<nav class="navbar">
+
+    <a href="{{ url_for('main.landing_page') }}"
+       class="logo">
+
+        AI <span>Resume Screener</span>
+
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="#features">
+            Features
+        </a>
+
+        <a href="#how-it-works">
+            How It Works
+        </a>
+
+        <a href="#technology">
+            AI Technology
+        </a>
+
+        <a href="{{ url_for('auth.login') }}"
+           class="nav-login">
+
+            Login
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="hero">
+
+
+    <div class="hero-content">
+
+
+        <div class="hero-badge">
+
+            <i class="fas fa-sparkles"></i>
+
+            AI-Powered Recruitment Platform
+
+        </div>
+
+
+        <h1>
+
+            Find the Right
+            <span>Candidate</span>
+            Faster
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            AI Resume Screener helps HR professionals analyze
+            resumes, compare candidates with job requirements,
+            identify skills, evaluate experience, and generate
+            intelligent matching results — all in one platform.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a href="{{ url_for('auth.login') }}"
+               class="btn btn-primary">
+
+                <i class="fas fa-right-to-bracket"></i>
+
+                Login to System
+
+            </a>
+
+
+            <a href="{{ url_for('auth.register') }}"
+               class="btn btn-secondary">
+
+                <i class="fas fa-user-plus"></i>
+
+                Create HR Account
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AI VISUAL -->
+
+    <div class="hero-visual">
+
+        <div class="ai-panel">
+
+
+            <div class="panel-top">
+
+                <div class="panel-title">
+
+                    <i class="fas fa-brain"></i>
+
+                    AI Candidate Analysis
+
+                </div>
+
+
+                <div class="status">
+
+                    <span class="status-dot"></span>
+
+                    Analysis Ready
+
+                </div>
+
+            </div>
+
+
+
+            <div class="resume-preview">
+
+                <div class="resume-header">
+
+                    <div class="resume-avatar">
+
+                        <i class="fas fa-user"></i>
+
+                    </div>
+
+                    <div>
+
+                        <div class="resume-name">
+                            Candidate Resume
+                        </div>
+
+                        <div class="resume-role">
+                            Software / Technical Profile
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="resume-line"></div>
+
+                <div class="resume-line medium"></div>
+
+                <div class="resume-line short"></div>
+
+            </div>
+
+
+
+            <div class="analysis-row">
+
+
+                <div class="analysis-card">
+
+                    <i class="fas fa-bullseye"></i>
+
+                    <div class="analysis-label">
+                        Match Score
+                    </div>
+
+                    <div class="analysis-value">
+                        87%
+                    </div>
+
+                    <div class="score-bar">
+
+                        <div class="score-fill"></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="analysis-card">
+
+                    <i class="fas fa-code"></i>
+
+                    <div class="analysis-label">
+                        Skills
+                    </div>
+
+                    <div class="analysis-value">
+                        92%
+                    </div>
+
+                    <div class="score-bar">
+
+                        <div
+                            class="score-fill"
+                            style="width: 92%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="analysis-row">
+
+
+                <div class="analysis-card">
+
+                    <i class="fas fa-briefcase"></i>
+
+                    <div class="analysis-label">
+                        Experience
+                    </div>
+
+                    <div class="analysis-value">
+                        ✓
+                    </div>
+
+                </div>
+
+
+                <div class="analysis-card">
+
+                    <i class="fas fa-graduation-cap"></i>
+
+                    <div class="analysis-label">
+                        Education
+                    </div>
+
+                    <div class="analysis-value">
+                        ✓
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TRUST STRIP
+====================================================== -->
+
+<div class="trust-strip">
+
+    <div class="trust-content">
+
+        <div class="trust-item">
+
+            <i class="fas fa-file-pdf"></i>
+
+            Resume Text Extraction
+
+        </div>
+
+
+        <div class="trust-item">
+
+            <i class="fas fa-brain"></i>
+
+            Semantic AI Matching
+
+        </div>
+
+
+        <div class="trust-item">
+
+            <i class="fas fa-code"></i>
+
+            Skill Analysis
+
+        </div>
+
+
+        <div class="trust-item">
+
+            <i class="fas fa-chart-line"></i>
+
+            Candidate Scoring
+
+        </div>
+
+
+        <div class="trust-item">
+
+            <i class="fas fa-copy"></i>
+
+            Plagiarism Detection
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FEATURES
+====================================================== -->
+
+<section class="section features"
+         id="features">
+
+
+    <div class="section-header">
+
+        <div class="section-label">
+            Powerful Features
+        </div>
+
+        <h2>
+            Everything HR Needs for Smarter Screening
+        </h2>
+
+        <p>
+            The system combines document processing,
+            natural language processing, semantic similarity,
+            skill analysis, and candidate evaluation into one
+            recruitment workflow.
+        </p>
+
+    </div>
+
+
+
+    <div class="feature-grid">
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-file-arrow-up"></i>
+            </div>
+
+            <h3>
+                Resume & JD Upload
+            </h3>
+
+            <p>
+                Upload resumes and job descriptions in PDF
+                or DOCX format and automatically extract their
+                textual content.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+
+            <h3>
+                Semantic Matching
+            </h3>
+
+            <p>
+                AI-based semantic analysis compares the meaning
+                of resume and job-description content rather
+                than relying only on exact keywords.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-code"></i>
+            </div>
+
+            <h3>
+                Skill Extraction
+            </h3>
+
+            <p>
+                Identify relevant technical and professional
+                skills and compare them against the requirements
+                of the selected job.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+
+            <h3>
+                Candidate Scoring
+            </h3>
+
+            <p>
+                Combine multiple matching factors into a final
+                candidate score and classification for HR review.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-user-check"></i>
+            </div>
+
+            <h3>
+                Experience & Education
+            </h3>
+
+            <p>
+                Analyze candidate experience and education against
+                the requirements defined in the job description.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                <i class="fas fa-copy"></i>
+            </div>
+
+            <h3>
+                Plagiarism Detection
+            </h3>
+
+            <p>
+                Compare uploaded resumes to identify highly similar
+                documents and provide a plagiarism or similarity
+                assessment.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     HOW IT WORKS
+====================================================== -->
+
+<section class="section"
+         id="how-it-works">
+
+
+    <div class="section-header">
+
+        <div class="section-label">
+            Simple Workflow
+        </div>
+
+        <h2>
+            From Resume to AI-Powered Decision Support
+        </h2>
+
+        <p>
+            A simple four-step workflow designed for HR
+            professionals.
+        </p>
+
+    </div>
+
+
+
+    <div class="steps">
+
+
+        <div class="step">
+
+            <div class="step-number">
+                01
+            </div>
+
+            <h3>
+                Upload
+            </h3>
+
+            <p>
+                Upload the candidate resume and the relevant
+                job description.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                02
+            </div>
+
+            <h3>
+                Extract
+            </h3>
+
+            <p>
+                The system extracts and processes important
+                textual information from both documents.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                03
+            </div>
+
+            <h3>
+                Analyze
+            </h3>
+
+            <p>
+                AI evaluates semantic similarity, skills,
+                experience, education, and document similarity.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                04
+            </div>
+
+            <h3>
+                Match
+            </h3>
+
+            <p>
+                HR receives a final score, classification,
+                recommendation, strengths, and weaknesses.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     AI TECHNOLOGY
+====================================================== -->
+
+<section class="section capabilities"
+         id="technology">
+
+
+    <div class="capability-layout">
+
+
+        <div class="capability-text">
+
+            <div class="section-label">
+                Intelligent Analysis
+            </div>
+
+            <h2>
+                More Than Keyword Matching
+            </h2>
+
+            <p>
+                The system combines multiple analysis techniques
+                to provide a richer picture of candidate-job
+                compatibility.
+            </p>
+
+
+            <ul class="capability-list">
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    TF-IDF based textual similarity
+
+                </li>
+
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Sentence-BERT semantic similarity
+
+                </li>
+
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    ESCO-based skill identification
+
+                </li>
+
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Experience and education evaluation
+
+                </li>
+
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Resume similarity and plagiarism analysis
+
+                </li>
+
+
+                <li>
+
+                    <i class="fas fa-check-circle"></i>
+
+                    HR recommendation and candidate classification
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+
+        <div class="metrics-panel">
+
+
+            <div class="metric">
+
+                <div class="metric-top">
+
+                    <span class="metric-name">
+                        Semantic Analysis
+                    </span>
+
+                    <span class="metric-value">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill one"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-top">
+
+                    <span class="metric-name">
+                        Skill Matching
+                    </span>
+
+                    <span class="metric-value">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill two"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-top">
+
+                    <span class="metric-name">
+                        Experience Analysis
+                    </span>
+
+                    <span class="metric-value">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill three"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metric-top">
+
+                    <span class="metric-name">
+                        Candidate Evaluation
+                    </span>
+
+                    <span class="metric-value">
+                        AI
+                    </span>
+
+                </div>
+
+                <div class="metric-bar">
+
+                    <div class="metric-fill four"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CALL TO ACTION
+====================================================== -->
+
+<section class="cta">
+
+
+    <div class="cta-box">
+
+        <h2>
+            Ready to Screen Smarter?
+        </h2>
+
+        <p>
+            Start using AI-powered resume screening to analyze
+            candidates, compare job requirements, and make your
+            recruitment workflow more efficient.
+        </p>
+
+
+        <a href="{{ url_for('auth.login') }}"
+           class="btn btn-primary">
+
+            <i class="fas fa-right-to-bracket"></i>
+
+            Login to AI Resume Screener
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer>
+
+    <div class="footer-content">
+
+
+        <div class="footer-logo">
+
+            AI <span>Resume Screener</span>
+
+        </div>
+
+
+        <div class="footer-text">
+
+            AI-powered resume screening and candidate analysis
+            system.
+
+        </div>
+
+
+        <div class="footer-text">
+
+            © 2026 AI Resume Screener
+
+        </div>
+
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

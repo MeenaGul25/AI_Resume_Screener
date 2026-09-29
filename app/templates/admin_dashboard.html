@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - AI Resume Screener</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        /*.logo {
+            font-size: 21px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+        }*/
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+        .admin-label {
+            /*text-align: center;
+            margin-bottom: 30px;*/
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+
+        /* NAVIGATION */
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            color: #d1d5db;
+            text-decoration: none;
+
+            padding: 13px 15px;
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        /* LOGOUT */
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+        
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        /* Individual icon colors */
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+        /* Keep icons white when their menu item is active */
+
+        .nav-link.active i {
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px 40px 50px;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            margin: 0 0 7px;
+            font-size: 28px;
+            color: #111827;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+        .admin-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 15px;
+
+            background: #eff6ff;
+            color: #1d4ed8;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            margin-bottom: 16px;
+        }
+
+        .section-header h2 {
+            margin: 0 0 5px;
+            font-size: 20px;
+            color: #111827;
+        }
+
+        .section-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           STAT CARDS
+        ========================= */
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+
+            position: relative;
+            overflow: hidden;
+
+            transition: 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            border-color: #d1d5db;
+        }
+
+        .stat-icon {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 10px;
+
+            margin-bottom: 15px;
+
+            font-size: 18px;
+        }
+
+        .stat-card h3 {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: normal;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .stat-description {
+            margin-top: 8px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .quick-action {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .quick-action:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 9px;
+
+            margin-bottom: 14px;
+
+            font-size: 17px;
+        }
+
+        .quick-action-title {
+            margin-bottom: 7px;
+            color: #111827;
+        }
+
+        .quick-action-description {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: normal;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           MATCHING STATS
+        ========================= */
+
+        .matching-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .matching-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 22px;
+
+            transition: 0.2s;
+        }
+
+        .matching-card:hover {
+            transform: translateY(-2px);
+            border-color: #d1d5db;
+        }
+
+        .matching-icon {
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 9px;
+
+            margin-bottom: 14px;
+
+            font-size: 17px;
+        }
+
+        .matching-card h3 {
+            margin: 0 0 12px;
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: normal;
+        }
+
+        .matching-value {
+            font-size: 27px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 950px;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #4b5563;
+            font-weight: bold;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .view-link {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .view-link:hover {
+            text-decoration: underline;
+        }
+
+        .score-badge {
+            font-weight: bold;
+        }
+
+        .classification {
+            color: #374151;
+        }
+
+
+        /* =========================
+           ADMIN INFORMATION
+        ========================= */
+
+        .admin-info {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .admin-info h2 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .admin-info p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .admin-info a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .admin-info a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            padding: 30px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stat-grid,
+            .matching-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .stat-grid,
+            .matching-grid,
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        AI <span>Resume Screener</span>
+    </div>
+
+    <div class="admin-label">
+        Administrator Panel
+    </div>
+
+
+    <a href="{{ url_for('admin.dashboard') }}"
+    class="nav-link active dashboard">
+        <i class="fas fa-house"></i>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="{{ url_for('admin.users') }}"
+    class="nav-link users">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+    </a>
+
+    <a href="{{ url_for('admin.resumes') }}"
+    class="nav-link resumes">
+        <i class="fas fa-file-lines"></i>
+        <span>Resumes</span>
+    </a>
+
+    <a href="{{ url_for('admin.job_descriptions') }}"
+    class="nav-link jobs">
+        <i class="fas fa-briefcase"></i>
+        <span>Job Descriptions</span>
+    </a>
+
+    <a href="{{ url_for('admin.matching_results') }}"
+    class="nav-link matching">
+        <i class="fas fa-chart-column"></i>
+        <span>Matching History</span>
+    </a>
+
+    <div class="admin-label">
+        Account
+    </div>
+
+    <a href="{{ url_for('auth.logout') }}"
+    class="nav-link logout">
+        <i class="fas fa-right-from-bracket"></i>
+        <span>Logout</span>
+    </a>
+
+</div>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="main">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Administrator Dashboard
+            </h1>
+
+            <p>
+                Monitor and manage the AI Resume Screener system.
+            </p>
+
+        </div>
+
+
+        <div class="admin-badge">
+
+            <i class="fas fa-shield-halved"></i>
+
+            Administrator
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SYSTEM OVERVIEW
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                System Overview
+            </h2>
+
+            <p>
+                Overall system activity and stored resources.
+            </p>
+
+        </div>
+
+
+        <div class="stat-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+
+                <h3>
+                    Total Users
+                </h3>
+
+                <div class="stat-value">
+                    {{ total_users }}
+                </div>
+
+                <div class="stat-description">
+                    Registered users
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="fas fa-file-lines"></i>
+                </div>
+
+                <h3>
+                    Total Resumes
+                </h3>
+
+                <div class="stat-value">
+                    {{ total_resumes }}
+                </div>
+
+                <div class="stat-description">
+                    Uploaded resumes
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+
+                <h3>
+                    Total Job Descriptions
+                </h3>
+
+                <div class="stat-value">
+                    {{ total_job_descriptions }}
+                </div>
+
+                <div class="stat-description">
+                    Stored job descriptions
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         QUICK ACTIONS
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <p>
+                Quickly access major administration functions.
+            </p>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+
+            <a href="{{ url_for('admin.users') }}"
+               class="quick-action">
+
+                <div class="quick-action-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+
+                <div class="quick-action-title">
+                    Manage Users
+                </div>
+
+                <div class="quick-action-description">
+                    View and manage registered users.
+                </div>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.resumes') }}"
+               class="quick-action">
+
+                <div class="quick-action-icon">
+                    <i class="fas fa-file-lines"></i>
+                </div>
+
+                <div class="quick-action-title">
+                    Manage Resumes
+                </div>
+
+                <div class="quick-action-description">
+                    View uploaded candidate resumes.
+                </div>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.job_descriptions') }}"
+               class="quick-action">
+
+                <div class="quick-action-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+
+                <div class="quick-action-title">
+                    Manage Job Descriptions
+                </div>
+
+                <div class="quick-action-description">
+                    View stored job descriptions.
+                </div>
+
+            </a>
+
+
+            <a href="{{ url_for('admin.matching_results') }}"
+               class="quick-action">
+
+                <div class="quick-action-icon">
+                    <i class="fas fa-chart-column"></i>
+                </div>
+
+                <div class="quick-action-title">
+                    Matching History
+                </div>
+
+                <div class="quick-action-description">
+                    Review previous resume matches.
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MATCHING STATISTICS
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Matching Statistics
+            </h2>
+
+            <p>
+                Overview of resume matching and plagiarism analysis.
+            </p>
+
+        </div>
+
+
+        <div class="matching-grid">
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+
+                <h3>
+                    Total Matches
+                </h3>
+
+                <div class="matching-value">
+                    {{ total_matches }}
+                </div>
+
+            </div>
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+
+                <h3>
+                    Total Plagiarism Checks
+                </h3>
+
+                <div class="matching-value">
+                    {{ total_plagiarism_checks }}
+                </div>
+
+            </div>
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-percent"></i>
+                </div>
+
+                <h3>
+                    Average Match Score
+                </h3>
+
+                <div class="matching-value">
+
+                    {% if average_score is not none %}
+
+                        {{ "%.2f"|format(average_score) }}%
+
+                    {% else %}
+
+                        0%
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-arrow-trend-up"></i>
+                </div>
+
+                <h3>
+                    Highest Match Score
+                </h3>
+
+                <div class="matching-value">
+
+                    {% if highest_score is not none %}
+
+                        {{ "%.2f"|format(highest_score) }}%
+
+                    {% else %}
+
+                        0%
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-copy"></i>
+                </div>
+
+                <h3>
+                    Average Plagiarism Score
+                </h3>
+
+                <div class="matching-value">
+
+                    {{ "%.2f"|format(average_plagiarism_score) }}%
+
+                </div>
+
+            </div>
+
+
+            <div class="matching-card">
+
+                <div class="matching-icon">
+                    <i class="fas fa-clock-rotate-left"></i>
+                </div>
+
+                <h3>
+                    Latest Match
+                </h3>
+
+                <div class="matching-value">
+
+                    {% if latest_match %}
+
+                        {{ "%.2f"|format(latest_match.final_score) }}%
+
+                    {% else %}
+
+                        No matches
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         RECENT MATCHING ACTIVITY
+    ========================= -->
+
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2>
+                Recent Matching Activity
+            </h2>
+
+            <p>
+                Latest resume screening results.
+            </p>
+
+        </div>
+
+
+        <div class="table-card">
+
+
+            {% if recent_matches %}
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Resume
+                            </th>
+
+                            <th>
+                                Job Description
+                            </th>
+
+                            <th>
+                                Match Score
+                            </th>
+
+                            <th>
+                                Classification
+                            </th>
+
+                            <th>
+                                Plagiarism
+                            </th>
+
+                            <th>
+                                Plagiarism Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for result in recent_matches %}
+
+                        <tr>
+
+                            <td>
+                                {{ result.resume.filename }}
+                            </td>
+
+
+                            <td>
+                                {{ result.job_description.title }}
+                            </td>
+
+
+                            <td class="score-badge">
+
+                                {{ "%.2f"|format(result.final_score) }}%
+
+                            </td>
+
+
+                            <td class="classification">
+
+                                {{ result.candidate_classification }}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if result.plagiarism_score is not none %}
+
+                                    {{ "%.2f"|format(result.plagiarism_score) }}%
+
+                                {% else %}
+
+                                    N/A
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {% if result.plagiarism_classification %}
+
+                                    {{ result.plagiarism_classification }}
+
+                                {% else %}
+
+                                    N/A
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                {{ result.created_at.strftime("%Y-%m-%d") }}
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    class="view-link"
+                                    href="{{ url_for('admin.view_matching_result', result_id=result.id) }}"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    No matching activity yet.
+
+                </div>
+
+            {% endif %}
+
+
+        </div>
+
+
+        <br>
+
+
+        <a
+            href="{{ url_for('admin.matching_results') }}"
+            class="quick-action"
+            style="display: inline-block;"
+        >
+
+            <i class="fas fa-list"></i>
+
+            &nbsp; View Complete Matching History →
+
+        </a>
+
+    </section>
+
+
+    <!-- =========================
+         ADMIN INFORMATION
+    ========================= -->
+
+    <section class="section">
+
+        <div class="admin-info">
+
+            <h2>
+                Admin Panel
+            </h2>
+
+
+            <p>
+                You are logged in as an administrator.
+                From this panel, you can monitor users, resumes,
+                job descriptions, matching activity, and plagiarism analysis.
+            </p>
+
+
+            <p>
+
+                <a href="{{ url_for('admin.users') }}">
+                    Manage Users
+                </a>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                <a href="{{ url_for('admin.resumes') }}">
+                    Manage Resumes
+                </a>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                <a href="{{ url_for('admin.job_descriptions') }}">
+                    Manage Job Descriptions
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>

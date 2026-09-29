@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Users - Admin Panel</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+
+        .logo {
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 10px;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        .admin-label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin: 20px 10px 10px;
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            color: #d1d5db;
+            text-decoration: none;
+
+            padding: 13px 15px;
+            margin-bottom: 7px;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+
+        .nav-link:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+
+        .nav-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+
+        /* Colored icons */
+
+        .nav-link.dashboard i {
+            color: #60a5fa;
+        }
+
+
+        .nav-link.users i {
+            color: #a78bfa;
+        }
+
+
+        .nav-link.resumes i {
+            color: #f59e0b;
+        }
+
+
+        .nav-link.jobs i {
+            color: #34d399;
+        }
+
+
+        .nav-link.matching i {
+            color: #22d3ee;
+        }
+
+
+        .nav-link.logout i {
+            color: #f87171;
+        }
+
+
+        /* Active icon becomes white */
+
+        .nav-link.active i {
+            color: white;
+        }
+
+
+        .nav-link.logout {
+            margin-top: 25px;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 30px 40px 50px;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+
+        .page-header h1 {
+            margin: 0 0 7px;
+            font-size: 28px;
+            color: #111827;
+        }
+
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+        }
+
+
+        .admin-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 9px 15px;
+
+            background: #eff6ff;
+            color: #1d4ed8;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           USERS SUMMARY
+        ========================= */
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            padding: 22px;
+
+            margin-bottom: 22px;
+
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #f3e8ff;
+            color: #8b5cf6;
+
+            border-radius: 11px;
+
+            font-size: 20px;
+        }
+
+
+        .summary-content h3 {
+            margin: 0 0 5px;
+
+            font-size: 14px;
+            font-weight: normal;
+
+            color: #6b7280;
+        }
+
+
+        .summary-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            padding: 20px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .search-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            margin-bottom: 14px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+
+        .search-title i {
+            color: #2563eb;
+        }
+
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+        }
+
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 13px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            color: #9ca3af;
+
+            font-size: 14px;
+        }
+
+
+        .search-input {
+            width: 100%;
+
+            padding: 11px 13px 11px 38px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        .search-input:focus {
+            border-color: #2563eb;
+
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+
+        .search-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 11px 18px;
+
+            background: #2563eb;
+            color: white;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .search-button:hover {
+            background: #1d4ed8;
+        }
+
+
+        .clear-button {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 11px 15px;
+
+            background: #f3f4f6;
+            color: #4b5563;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .clear-button:hover {
+            background: #e5e7eb;
+        }
+
+
+        /* =========================
+           USERS TABLE
+        ========================= */
+
+        .table-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+
+        .table-header {
+            padding: 20px 22px;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .table-header h2 {
+            margin: 0;
+
+            font-size: 18px;
+            color: #111827;
+        }
+
+
+        .table-header p {
+            margin: 5px 0 0;
+
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 850px;
+        }
+
+
+        th,
+        td {
+            padding: 15px 18px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #e5e7eb;
+
+            font-size: 13px;
+        }
+
+
+        th {
+            background: #f8fafc;
+
+            color: #4b5563;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+        }
+
+
+        tbody tr {
+            transition: 0.15s;
+        }
+
+
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* =========================
+           USER ID
+        ========================= */
+
+        .user-id {
+            color: #6b7280;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           USER NAME
+        ========================= */
+
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            font-weight: bold;
+
+            color: #111827;
+        }
+
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 50%;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           EMAIL
+        ========================= */
+
+        .email {
+            color: #4b5563;
+        }
+
+
+        /* =========================
+           ROLE BADGES
+        ========================= */
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+            font-weight: bold;
+
+            text-transform: uppercase;
+        }
+
+
+        .role-admin {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+
+
+        .role-hr {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .action-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+
+        .role-form {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+
+        .role-select {
+            padding: 8px 10px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+
+            background: white;
+
+            color: #374151;
+
+            font-size: 12px;
+
+            cursor: pointer;
+
+            outline: none;
+        }
+
+
+        .role-select:focus {
+            border-color: #2563eb;
+        }
+
+
+        .change-role-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 8px 11px;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border: 1px solid #dbeafe;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .change-role-button:hover {
+            background: #dbeafe;
+        }
+
+
+        .delete-button {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            padding: 8px 11px;
+
+            background: #fef2f2;
+            color: #dc2626;
+
+            border: 1px solid #fee2e2;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .delete-button:hover {
+            background: #fee2e2;
+        }
+
+
+        /* =========================
+           CURRENT ADMIN
+        ========================= */
+
+        .current-admin {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            padding: 8px 11px;
+
+            background: #eff6ff;
+            color: #2563eb;
+
+            border-radius: 7px;
+
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .bottom-actions {
+            margin-top: 22px;
+        }
+
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 11px 16px;
+
+            background: white;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            color: #374151;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+
+        .back-button:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            padding: 50px 20px;
+
+            text-align: center;
+
+            color: #6b7280;
+        }
+
+
+        .empty-state i {
+            font-size: 35px;
+
+            color: #9ca3af;
+
+            margin-bottom: 12px;
+        }
+
+
+        .empty-state h3 {
+            margin: 0 0 6px;
+
+            color: #374151;
+        }
+
+
+        .empty-state p {
+            margin: 0;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .search-form {
+                flex-wrap: wrap;
+            }
+
+            .search-input-wrapper {
+                max-width: none;
+                width: 100%;
+                flex-basis: 100%;
+            }
+
+        }
+
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                position: relative;
+
+                width: 100%;
+                height: auto;
+            }
+
+
+            .main {
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+
+            .page-header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .summary-card {
+                padding: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+        SIDEBAR
+    ========================= -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            AI <span>Resume Screener</span>
+        </div>
+
+
+        <div class="admin-label">
+            Main
+        </div>
+
+
+        <a href="{{ url_for('admin.dashboard') }}"
+        class="nav-link dashboard">
+
+            <i class="fas fa-house"></i>
+
+            <span>
+                Dashboard
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.users') }}"
+        class="nav-link active users">
+
+            <i class="fas fa-users"></i>
+
+            <span>
+                Users
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.resumes') }}"
+        class="nav-link resumes">
+
+            <i class="fas fa-file-lines"></i>
+
+            <span>
+                Resumes
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.job_descriptions') }}"
+        class="nav-link jobs">
+
+            <i class="fas fa-briefcase"></i>
+
+            <span>
+                Job Descriptions
+            </span>
+
+        </a>
+
+
+        <a href="{{ url_for('admin.matching_results') }}"
+        class="nav-link matching">
+
+            <i class="fas fa-chart-column"></i>
+
+            <span>
+                Matching History
+            </span>
+
+        </a>
+
+
+        <div class="admin-label">
+            Account
+        </div>
+
+
+        <a href="{{ url_for('auth.logout') }}"
+        class="nav-link logout">
+
+            <i class="fas fa-right-from-bracket"></i>
+
+            <span>
+                Logout
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+        MAIN CONTENT
+    ========================= -->
+
+    <div class="main">
+
+
+        <!-- =========================
+            PAGE HEADER
+        ========================= -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    User Management
+                </h1>
+
+                <p>
+                    View and manage registered users and their roles.
+                </p>
+
+            </div>
+
+
+            <div class="admin-badge">
+
+                <i class="fas fa-shield-halved"></i>
+
+                Administrator
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+            USER SUMMARY
+        ========================= -->
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+
+                <i class="fas fa-users"></i>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <h3>
+                    Total Registered Users
+                </h3>
+
+                <div class="summary-number">
+                    {{ users|length }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+            SEARCH
+        ========================= -->
+
+        <div class="search-card">
+
+            <div class="search-title">
+
+                <i class="fas fa-magnifying-glass"></i>
+
+                Search Users
+
+            </div>
+
+
+            <form
+                method="GET"
+                action="{{ url_for('admin.users') }}"
+                class="search-form"
+            >
+
+                <div class="search-input-wrapper">
+
+                    <i class="fas fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="search-input"
+                        placeholder="Search by name or email"
+                        value="{{ search }}"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="search-button"
+                >
+
+                    <i class="fas fa-magnifying-glass"></i>
+
+                    Search
+
+                </button>
+
+
+                {% if search %}
+
+                    <a
+                        href="{{ url_for('admin.users') }}"
+                        class="clear-button"
+                    >
+
+                        <i class="fas fa-xmark"></i>
+
+                        Clear
+
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+        </div>
+
+
+        <!-- =========================
+            USERS TABLE
+        ========================= -->
+
+        <div class="table-card">
+
+
+            <div class="table-header">
+
+                <div>
+
+                    <h2>
+                        Registered Users
+                    </h2>
+
+                    <p>
+                        Manage user accounts and access roles.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if users %}
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    User
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Role
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for user in users %}
+
+                            <tr>
+
+
+                                <!-- USER ID -->
+
+                                <td class="user-id">
+
+                                    #{{ user.id }}
+
+                                </td>
+
+
+                                <!-- USER NAME -->
+
+                                <td>
+
+                                    <div class="user-name">
+
+                                        <div class="user-avatar">
+
+                                            <i class="fas fa-user"></i>
+
+                                        </div>
+
+                                        {{ user.name }}
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- EMAIL -->
+
+                                <td class="email">
+
+                                    {{ user.email }}
+
+                                </td>
+
+
+                                <!-- ROLE -->
+
+                                <td>
+
+                                    {% if user.role == "ADMIN" %}
+
+                                        <span class="role-badge role-admin">
+
+                                            <i class="fas fa-shield-halved"></i>
+
+                                            ADMIN
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="role-badge role-hr">
+
+                                            <i class="fas fa-user-tie"></i>
+
+                                            HR
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td>
+
+                                    {% if user.id != session["user_id"] %}
+
+                                        <div class="action-container">
+
+
+                                            <!-- CHANGE ROLE -->
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for('admin.change_user_role', user_id=user.id) }}"
+                                                class="role-form"
+                                            >
+
+                                                <select
+                                                    name="role"
+                                                    class="role-select"
+                                                >
+
+                                                    <option
+                                                        value="HR"
+                                                        {% if user.role == "HR" %}
+                                                        selected
+                                                        {% endif %}
+                                                    >
+                                                        HR
+                                                    </option>
+
+
+                                                    <option
+                                                        value="ADMIN"
+                                                        {% if user.role == "ADMIN" %}
+                                                        selected
+                                                        {% endif %}
+                                                    >
+                                                        ADMIN
+                                                    </option>
+
+                                                </select>
+
+
+                                                <button
+                                                    type="submit"
+                                                    class="change-role-button"
+                                                >
+
+                                                    <i class="fas fa-user-gear"></i>
+
+                                                    Change Role
+
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- DELETE USER -->
+
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for('admin.delete_user', user_id=user.id) }}"
+                                                onsubmit="return confirm('Are you sure you want to delete this user?');"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="delete-button"
+                                                >
+
+                                                    <i class="fas fa-trash"></i>
+
+                                                    Delete
+
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <span class="current-admin">
+
+                                            <i class="fas fa-user-shield"></i>
+
+                                            Current Admin
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <i class="fas fa-users-slash"></i>
+
+                    <h3>
+                        No Users Found
+                    </h3>
+
+                    <p>
+                        There are no registered users matching your search.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =========================
+            BACK BUTTON
+        ========================= -->
+
+        <div class="bottom-actions">
+
+            <a
+                class="back-button"
+                href="{{ url_for('admin.dashboard') }}"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Admin Dashboard
+
+            </a>
+
+        </div>
+
+
+</div>
+
+
+</body>
+
+</html>
