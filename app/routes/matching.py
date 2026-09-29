@@ -15,14 +15,6 @@ from app.models.matching_result import MatchingResult
 
 from app.services.matcher import calculate_match_score
 
-from app.services.semantic_matcher import (
-    calculate_semantic_match_score
-)
-
-from app.services.skill_extractor import (
-    compare_skills
-)
- 
 from app.services.candidate_analyzer import (
     analyze_candidate,
     calculate_experience_score,
@@ -69,6 +61,15 @@ def match_resume():
     ).all()
 
     if request.method == "POST":
+
+        # Load heavy AI components only when matching is requested.
+        from app.services.semantic_matcher import (
+            calculate_semantic_match_score
+        )
+
+        from app.services.skill_extractor import (
+            compare_skills
+        )
 
         resume_id = request.form.get(
             "resume_id"
