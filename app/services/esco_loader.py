@@ -155,27 +155,4 @@ def get_esco_skill_variants(skill_name):
 
     return sorted(variants)
 
-##testing
-
-if __name__ == "__main__":
-    skills = load_esco_skills()
-    occupations = load_esco_occupations()
-    relations = load_esco_skill_relations()
-
-    skill_dictionary = build_esco_skill_dictionary()
-
-    print("ESCO DATASET TEST")
-    print("-----------------")
-
-    print("Skills:", len(skills))
-    print("Occupations:", len(occupations))
-    print("Occupation-Skill Relations:", len(relations))
-    print("Searchable Skill Terms:", len(skill_dictionary))
-
-    print("\nExample skill terms:")
-
-    for index, term in enumerate(skill_dictionary.keys()):
-        print("-", term)
-
-        if index >= 9:
-            break
+ 

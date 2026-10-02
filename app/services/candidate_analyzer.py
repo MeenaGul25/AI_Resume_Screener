@@ -399,14 +399,6 @@ def analyze_candidate(
     Perform experience and education analysis.
     """
 
-    print("\n========== EDUCATION DEBUG ==========")
-    print("Detected education:", extract_education(resume_text))
-    print("Resume contains 'master':", "master" in resume_text.lower())
-    print("Resume contains 'mba':", "mba" in resume_text.lower())
-    print("Resume contains 'bba':", "bba" in resume_text.lower())
-    print("Resume contains 'bachelor':", "bachelor" in resume_text.lower())
-    print("=====================================\n")
-
     experience = compare_experience(
         resume_text,
         job_description_text
@@ -589,21 +581,4 @@ def generate_strengths_weaknesses(
         "weaknesses": weaknesses
     }
 
-#testing
-
-if __name__ == "__main__":
-
-    test_cases = [
-        "Islamabad, Pakistan",
-        "Bachelor of Business Administration (BBA)",
-        "Bachelor of Business Administration (BBA), Islamabad",
-        "Master of Business Administration (MBA)",
-        "MBA graduate working in Islamabad",
-        "BS Computer Science"
-    ]
-
-    print("\nEDUCATION FALSE-DETECTION TEST")
-    print("--------------------------------")
-
-    for text in test_cases:
-        print(f"{text} -> {extract_education(text)}")
+ 

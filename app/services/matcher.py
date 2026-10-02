@@ -35,24 +35,4 @@ def calculate_match_score(resume_text, job_description_text):
 
     return round(score, 2)
 
-if __name__ == "__main__":
-
-    resume = """
-    Python developer with experience in Flask,
-    SQL, REST APIs, machine learning and Git.
-    """
-
-    job_description = """
-    We are looking for a Python developer with
-    experience in Flask, SQL, REST APIs,
-    machine learning and Git.
-    """
-
-    score = calculate_match_score(
-        resume,
-        job_description
-    )
-
-    print(
-        f"Match Score: {score}%"
-    )
+ 

@@ -1,9 +1,11 @@
+import os
 import fitz
 import pytesseract
 
-pytesseract.pytesseract.tesseract_cmd = (
-    r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-)
+tesseract_path = os.environ.get("TESSERACT_CMD")
+
+if tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
 
 from PIL import Image
 from io import BytesIO

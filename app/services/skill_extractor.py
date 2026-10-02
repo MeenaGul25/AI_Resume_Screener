@@ -482,15 +482,7 @@ def extract_skills(text):
 
     candidate_phrases = extract_candidate_phrases(text)
 
-    # for phrase in candidate_phrases:
-
-    #     phrase = phrase.strip().lower()
-
-    #     if not phrase:
-    #         continue
-
-    #     found_skills.add(phrase)
-
+  
 
     # --------------------------------------------------
     # 4. ESCO semantic evidence
