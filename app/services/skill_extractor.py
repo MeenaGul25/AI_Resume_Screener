@@ -14,10 +14,6 @@ nlp = spacy.load("en_core_web_sm")
 ESCO_SKILLS = build_esco_skill_dictionary()
 
 def normalize_skill_name(skill):
-    """
-    Normalize skill names so that different but equivalent
-    representations can be matched consistently.
-    """
 
     skill = skill.strip().lower()
 
@@ -53,15 +49,6 @@ def normalize_skill_name(skill):
     return normalization_map.get(skill, skill)
 
 def normalize_text_for_skill_matching(text):
-    """
-    Normalize text before skill matching.
-
-    This handles common grammatical variations such as:
-    prepare -> prepared
-    preparing -> prepare
-
-    It also normalizes whitespace and punctuation.
-    """
 
     if not text:
         return ""
@@ -163,8 +150,6 @@ def extract_candidate_phrases(text):
         "responsibility", "responsibilities",
     }
 
-    # Words that normally indicate that the phrase
-    # is describing an action rather than naming a skill.
     action_words = {
         "analyze",
         "analyzed",
@@ -267,16 +252,10 @@ def extract_candidate_phrases(text):
 
 def find_esco_candidates(phrases):
     """
-    Generate conservative ESCO candidates.
-
     Candidates are generated using:
     1. Exact phrase matches.
     2. Strong overlap involving at least one
        domain-specific word.
-
-    Generic words such as financial, data,
-    planning, analysis, etc. are not enough
-    to create an ESCO candidate.
     """
 
     if not phrases:
@@ -415,15 +394,7 @@ def find_esco_candidates(phrases):
     return list(candidates.values())
 
 def extract_skills(text):
-    """
-    Extract skills from text using both:
-
-    1. Existing manually defined CS/IT skills
-    2. ESCO multi-domain skills
-
-    Returns a sorted list of canonical skill names.
-    """
-
+    
     if not text:
         return []
 
@@ -480,9 +451,7 @@ def extract_skills(text):
     # 3. Candidate phrase extraction
     # --------------------------------------------------
 
-    candidate_phrases = extract_candidate_phrases(text)
-
-  
+    candidate_phrases = extract_candidate_phrases(text)  
 
     # --------------------------------------------------
     # 4. ESCO semantic evidence
@@ -494,8 +463,6 @@ def extract_skills(text):
         threshold=0.70
     )
 
-    # Add only semantically validated resume phrases.
-    # The original resume phrase is preserved.
     for candidate in semantic_skill_candidates:
 
         skill = candidate["skill"].strip().lower()
@@ -505,13 +472,6 @@ def extract_skills(text):
 
         found_skills.add(skill)
 
-    # ESCO semantic candidates are supporting evidence.
-    # The original resume phrase is preserved rather than
-    # replacing it with an ESCO action-oriented label.
-    # ESCO semantic candidates are used as supporting evidence.
-    # Do not directly add ESCO preferred labels to found_skills,
-    # because ESCO labels may be action-oriented concepts such as
-    # "use spreadsheets software" or "follow up accounts receivables".
     # -------------------------------------------------
     # Normalize obvious duplicate representations
     # -------------------------------------------------
@@ -529,9 +489,6 @@ def extract_skills(text):
 
 def compare_skills(resume_text, job_description_text):
     """
-    Compare skills found in a resume against  
-    skills required by a job description.
-
     Uses:
     1. ESCO/exact skill matching
     2. SBERT semantic skill matching
